@@ -1,0 +1,45 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: MyString
+  domicilio: MyString
+  telefono: MyString
+  celular: MyString
+  web: MyString
+  horario_desde: 2020-08-11 22:48:18
+  horario_hasta: 2020-08-11 22:48:18
+  facebook: MyString
+  instagram: MyString
+  twitter: MyString
+  latitud: MyString
+  longitud: MyString
+  email: MyString
+  provincia: one
+  departamento: one
+  localidad: one
+  descripcion: MyString
+  usuario: one
+  entrega: false
+  activo: false
+
+two:
+  nombre: MyString
+  domicilio: MyString
+  telefono: MyString
+  celular: MyString
+  web: MyString
+  horario_desde: 2020-08-11 22:48:18
+  horario_hasta: 2020-08-11 22:48:18
+  facebook: MyString
+  instagram: MyString
+  twitter: MyString
+  latitud: MyString
+  longitud: MyString
+  email: MyString
+  provincia: two
+  departamento: two
+  localidad: two
+  descripcion: MyString
+  usuario: two
+  entrega: false
+  activo: false

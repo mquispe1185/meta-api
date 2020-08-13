@@ -12,4 +12,12 @@ class Usuario < ActiveRecord::Base
   belongs_to :provincia, optional: true
   belongs_to :departamento, optional: true
   belongs_to :localidad, optional: true
+
+  after_create :rol
+
+    def rol
+       self.update(rol_id: 2)
+    end
+
+    has_many :comercios
 end

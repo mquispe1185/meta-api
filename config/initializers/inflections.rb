@@ -19,4 +19,6 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
     inflect.irregular 'rol', 'roles'
     inflect.irregular 'contacto', 'contactos'
     inflect.irregular 'comercio', 'comercios'
+    inflect.irregular 'referencia', 'referencias'
+    inflect.irregular 'rubro', 'rubros'
 end
