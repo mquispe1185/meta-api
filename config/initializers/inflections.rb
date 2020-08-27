@@ -21,4 +21,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
     inflect.irregular 'comercio', 'comercios'
     inflect.irregular 'referencia', 'referencias'
     inflect.irregular 'rubro', 'rubros'
+    inflect.irregular 'horario', 'horarios'
 end

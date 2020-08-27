@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :horarios
   resources :rubros
   resources :comercios
   resources :referencias

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_12_022457) do
+ActiveRecord::Schema.define(version: 2020_08_17_004009) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,10 +21,6 @@ ActiveRecord::Schema.define(version: 2020_08_12_022457) do
     t.string "telefono"
     t.string "celular"
     t.string "web"
-    t.time "horario_desde"
-    t.time "horario_hasta"
-    t.time "horario_desde2"
-    t.time "horario_hasta2"
     t.string "facebook"
     t.string "instagram"
     t.string "twitter"
@@ -55,6 +51,16 @@ ActiveRecord::Schema.define(version: 2020_08_12_022457) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["provincia_id"], name: "index_departamentos_on_provincia_id"
+  end
+
+  create_table "horarios", force: :cascade do |t|
+    t.integer "dia"
+    t.time "desde"
+    t.time "hasta"
+    t.bigint "comercio_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["comercio_id"], name: "index_horarios_on_comercio_id"
   end
 
   create_table "localidades", force: :cascade do |t|
@@ -150,6 +156,7 @@ ActiveRecord::Schema.define(version: 2020_08_12_022457) do
   add_foreign_key "comercios", "rubros"
   add_foreign_key "comercios", "usuarios"
   add_foreign_key "departamentos", "provincias"
+  add_foreign_key "horarios", "comercios"
   add_foreign_key "localidades", "departamentos"
   add_foreign_key "localidades", "provincias"
   add_foreign_key "referencias", "comercios"

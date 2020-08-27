@@ -30,7 +30,8 @@ class ComerciosController < ApplicationController
   # PATCH/PUT /comercios/1
   def update
     if @comercio.update(comercio_params)
-      render json: @comercio
+      @comercios = current_usuario.comercios.where(activo: true)
+      render json: @comercios
     else
       render json: @comercio.errors, status: :unprocessable_entity
     end
@@ -49,8 +50,7 @@ class ComerciosController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def comercio_params
-      params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web, :horario_desde, :horario_hasta, 
-        :horario_desde2, :horario_hasta2, :rubro_id,
+      params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id,
         :facebook, :instagram, :twitter, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id, 
         :descripcion, :usuario_id, :entrega, :activo)
     end

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  dia: 1
+  desde: 2020-08-16 21:40:09
+  hasta: 2020-08-16 21:40:09
+  comercio: one
+
+two:
+  dia: 1
+  desde: 2020-08-16 21:40:09
+  hasta: 2020-08-16 21:40:09
+  comercio: two

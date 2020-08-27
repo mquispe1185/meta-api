@@ -16,7 +16,7 @@ class Usuario < ActiveRecord::Base
   after_create :rol
 
     def rol
-       self.update(rol_id: 2)
+       self.update(rol_id: 3)
     end
 
     has_many :comercios
