@@ -3,7 +3,7 @@ class UsuariosController < ApplicationController
 
   # GET /usuarios
   def index
-    @usuarios = Usuario.where(rol_id: 2,activo: true)
+    @usuarios = Usuario.where(rol_id: [2,3],activo: true)
     render json: @usuarios
   end
 
