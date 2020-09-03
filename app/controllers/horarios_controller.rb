@@ -37,7 +37,11 @@ class HorariosController < ApplicationController
 
   # DELETE /horarios/1
   def destroy
+    comercio = Comercio.find(@horario.comercio_id)
+    
     @horario.destroy
+    @horarios = comercio.horarios.order(:dia)
+    render json: @horarios
   end
 
   private

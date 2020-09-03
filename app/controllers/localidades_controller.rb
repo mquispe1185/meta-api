@@ -3,7 +3,7 @@ class LocalidadesController < ApplicationController
 
   # GET /localidades
   def index
-    @localidades = Localidad.all
+    @localidades = Localidad.where(departamento_id: params[:departamento_id]).order(:nombre)
 
     render json: @localidades
   end

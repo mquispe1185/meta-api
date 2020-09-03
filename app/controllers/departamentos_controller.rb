@@ -3,7 +3,7 @@ class DepartamentosController < ApplicationController
 
   # GET /departamentos
   def index
-    @departamentos = Departamento.all
+    @departamentos = Departamento.all.order(:nombre)
 
     render json: @departamentos
   end

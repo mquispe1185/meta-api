@@ -5,4 +5,6 @@ class Comercio < ApplicationRecord
   belongs_to :usuario
   belongs_to :rubro
   has_many :horarios
+
+  has_one_attached :foto, dependent: :destroy
 end

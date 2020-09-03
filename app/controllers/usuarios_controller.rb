@@ -17,7 +17,7 @@ class UsuariosController < ApplicationController
     @usuario = Usuario.new(usuario_params)
 
     if @usuario.save
-      render json: @usuario, status: :created, location: @usuario
+      render json: @usuario, status: :created
     else
       render json: @usuario.errors, status: :unprocessable_entity
     end
@@ -26,13 +26,21 @@ class UsuariosController < ApplicationController
   # PATCH/PUT /usuarios/1
   def update
     if @usuario.update(usuario_params)
-      @usuarios = Usuario.where(rol_id: 2,activo: true)
-      render json: @usuarios
+      render json: @usuario
     else
       render json: @usuario.errors, status: :unprocessable_entity
     end
   end
 
+  def habilitar
+    @usuario = Usuario.find(params[:usuario_id])
+    if @usuario.update(usuario_params)
+      @usuarios = Usuario.where(rol_id: [2,3],activo: true)
+      render json: @usuarios
+    else
+      render json: @usuario.errors, status: :unprocessable_entity
+    end
+  end
   # DELETE /usuarios/1
   def destroy
     @usuario.destroy
