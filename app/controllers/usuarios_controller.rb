@@ -3,7 +3,7 @@ class UsuariosController < ApplicationController
 
   # GET /usuarios
   def index
-    @usuarios = Usuario.where(rol_id: [2,3],activo: true)
+    @usuarios = Usuario.where(rol_id: [2,3],en_espera: true, activo: true)
     render json: @usuarios
   end
 
@@ -32,10 +32,19 @@ class UsuariosController < ApplicationController
     end
   end
 
+  def pedidoalta
+    if @usuario.update(usuario_params)
+      render json: @usuario
+    else
+      render json: @usuario.errors, status: :unprocessable_entity
+    end
+  end
+
+  #usado por admin
   def habilitar
     @usuario = Usuario.find(params[:usuario_id])
     if @usuario.update(usuario_params)
-      @usuarios = Usuario.where(rol_id: [2,3],activo: true)
+      @usuarios = Usuario.where(rol_id: [2,3],en_espera: true,activo: true)
       render json: @usuarios
     else
       render json: @usuario.errors, status: :unprocessable_entity
@@ -55,6 +64,6 @@ class UsuariosController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def usuario_params
       params.require(:usuario).permit(:login,:dni,:nombre,:email,:telefono,:sexo,:rol_id,:provincia_id,:departamento_id,
-              :localidad_id,:password, :password_confirmation,:celular, :domicilio, :habilitado)
+              :localidad_id,:password, :password_confirmation,:celular, :domicilio, :habilitado,:en_espera)
     end
 end

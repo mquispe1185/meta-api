@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_02_054652) do
+ActiveRecord::Schema.define(version: 2020_09_04_032735) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 2020_09_02_054652) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "url_foto"
+    t.string "tags"
     t.index ["departamento_id"], name: "index_comercios_on_departamento_id"
     t.index ["localidad_id"], name: "index_comercios_on_localidad_id"
     t.index ["provincia_id"], name: "index_comercios_on_provincia_id"
@@ -162,7 +163,7 @@ ActiveRecord::Schema.define(version: 2020_09_02_054652) do
     t.bigint "provincia_id"
     t.bigint "departamento_id"
     t.bigint "localidad_id"
-    t.boolean "en_espera", default: true
+    t.boolean "en_espera", default: false
     t.index ["confirmation_token"], name: "index_usuarios_on_confirmation_token", unique: true
     t.index ["departamento_id"], name: "index_usuarios_on_departamento_id"
     t.index ["email"], name: "index_usuarios_on_email", unique: true

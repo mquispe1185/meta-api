@@ -13,11 +13,12 @@ class Usuario < ActiveRecord::Base
   belongs_to :departamento, optional: true
   belongs_to :localidad, optional: true
 
+
   after_create :rol
 
     def rol
        self.update(rol_id: 3)
     end
 
-    has_many :comercios
+    has_many :comercios, dependent: :destroy
 end

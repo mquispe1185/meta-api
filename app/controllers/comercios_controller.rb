@@ -4,9 +4,12 @@ class ComerciosController < ApplicationController
   # GET /comercios
   def index
     @comercios = Comercio.all
-    puts 'en index comerciooo'
-    puts rails_blob_path(@comercios.first.foto, only_path: true)
-    puts '----------------------fin------------------'
+    render json: @comercios
+  end
+
+
+  def busqueda
+    @comercios = Comercio.search(params[:term])
     render json: @comercios
   end
 
@@ -68,6 +71,6 @@ class ComerciosController < ApplicationController
     def comercio_params
       params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id,
         :facebook, :instagram, :twitter, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id, 
-        :descripcion, :usuario_id, :entrega, :activo,:foto)
+        :descripcion, :usuario_id, :entrega, :activo,:foto,:tags)
     end
 end
