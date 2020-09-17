@@ -1,12 +1,16 @@
 class ComerciosController < ApplicationController
   before_action :set_comercio, only: [:show, :update, :destroy,:set_foto]
-  before_action :authenticate_usuario!, only:[:create,:set_foto]
+  before_action :authenticate_usuario!, only:[:create,:set_foto,:mis_comercios]
   # GET /comercios
   def index
     @comercios = Comercio.all
     render json: @comercios
   end
 
+  def mis_comercios
+    @comercios = current_usuario.comercios
+    render json: @comercios
+  end
 
   def busqueda
     @comercios = Comercio.search(params[:term])
