@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_04_032735) do
+ActiveRecord::Schema.define(version: 2020_09_20_213750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,8 @@ ActiveRecord::Schema.define(version: 2020_09_04_032735) do
     t.datetime "updated_at", null: false
     t.string "url_foto"
     t.string "tags"
+    t.boolean "habilitado", default: false
+    t.boolean "envio", default: false
     t.index ["departamento_id"], name: "index_comercios_on_departamento_id"
     t.index ["localidad_id"], name: "index_comercios_on_localidad_id"
     t.index ["provincia_id"], name: "index_comercios_on_provincia_id"

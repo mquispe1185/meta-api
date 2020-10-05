@@ -15,5 +15,6 @@ Rails.application.routes.draw do
   put '/habilitar_usuario', to: 'usuarios#habilitar'
   put '/set_foto', to: 'comercios#set_foto'
   get '/miscomercios', to: 'comercios#mis_comercios'
+  get '/buscar', to: 'comercios#busqueda'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

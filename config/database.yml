@@ -25,7 +25,7 @@ development:
   <<: *default
   database: dbmeta
   username: postgres
-  password: <%= Rails.application.credentials.dig(:dbpass) %>
+  password: postgres
   host: localhost
   port: 5432
 

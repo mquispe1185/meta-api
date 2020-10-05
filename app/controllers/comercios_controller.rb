@@ -27,7 +27,7 @@ class ComerciosController < ApplicationController
 
     @comercio.foto.attach(params[:foto])
     if @comercio.foto.attached?
-        @comercio.update(url_foto: "https://metaapp123.s3.us-east-2.amazonaws.com/#{@comercio.foto.key}")
+        @comercio.update(url_foto: "https://s3.us-east-2.amazonaws.com/meta.app/#{@comercio.foto.key}")
    
     end
     @comercios = current_usuario.comercios
@@ -75,6 +75,6 @@ class ComerciosController < ApplicationController
     def comercio_params
       params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id,
         :facebook, :instagram, :twitter, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id, 
-        :descripcion, :usuario_id, :entrega, :activo,:foto,:tags)
+        :descripcion, :usuario_id, :entrega, :activo,:foto,:tags,:habilitado,:envio)
     end
 end

@@ -14,10 +14,8 @@ amazon:
   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
   #secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
   region: us-east-2
-  bucket: metaapp123
+  bucket: meta.app
 
-  #AKIAI6VO2C4G7WPTOL2A
-  #sec YObMV2qzdSyBrUwJyjFYuPHNvLocBZ9sHnkhvYpA
 # Remember not to checkin your GCS keyfile to a repository
 # google:
 #   service: GCS
