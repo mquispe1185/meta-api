@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 2020_09_20_213750) do
     t.string "tags"
     t.boolean "habilitado", default: false
     t.boolean "envio", default: false
+    t.integer "tipo_servicio", default: 0
+    t.integer "visitas", default: 0
     t.index ["departamento_id"], name: "index_comercios_on_departamento_id"
     t.index ["localidad_id"], name: "index_comercios_on_localidad_id"
     t.index ["provincia_id"], name: "index_comercios_on_provincia_id"

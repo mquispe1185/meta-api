@@ -3,12 +3,17 @@ class ComerciosController < ApplicationController
   before_action :authenticate_usuario!, only:[:create,:set_foto,:mis_comercios]
   # GET /comercios
   def index
-    @comercios = Comercio.all
+    @comercios = Comercio.where(activo: true).order(:nombre)
+    render json: @comercios
+  end
+
+  def index_inicio
+    @comercios = Comercio.where(activo: true, habilitado: true)
     render json: @comercios
   end
 
   def mis_comercios
-    @comercios = current_usuario.comercios
+    @comercios = current_usuario.comercios.order(:nombre)
     render json: @comercios
   end
 
@@ -60,6 +65,28 @@ class ComerciosController < ApplicationController
     end
   end
 
+  def habilitar
+    @comercio = Comercio.find(params[:comercio_id])
+    @comercio.habilitado = !@comercio.habilitado
+    if @comercio.save
+      @comercios = Comercio.where(activo: true)
+      render json: @comercios
+    else
+      render json: @comercio.errors, status: :unprocessable_entity
+    end
+  end
+
+  def add_visita
+    @comercio = Comercio.find(params[:comercio_id])
+    @comercio.visitas += 1
+    if @comercio.save
+      render json: @comercio
+    else
+      render json: @comercio.errors, status: :unprocessable_entity
+    end
+  end
+
+
   # DELETE /comercios/1
   def destroy
     @comercio.destroy
@@ -73,7 +100,7 @@ class ComerciosController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def comercio_params
-      params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id,
+      params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id, :tipo_servicio,:visitas,
         :facebook, :instagram, :twitter, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id, 
         :descripcion, :usuario_id, :entrega, :activo,:foto,:tags,:habilitado,:envio)
     end
