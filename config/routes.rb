@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :promociones
   resources :horarios
   resources :rubros
   resources :comercios
@@ -19,5 +20,6 @@ Rails.application.routes.draw do
   get '/miscomercios', to: 'comercios#mis_comercios'
   get '/listacomercios', to: 'comercios#index_inicio'
   get '/buscar', to: 'comercios#busqueda'
+  get '/promos', to: 'promociones#index_main'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

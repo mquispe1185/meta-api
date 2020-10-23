@@ -8,7 +8,7 @@ class ComerciosController < ApplicationController
   end
 
   def index_inicio
-    @comercios = Comercio.where(activo: true, habilitado: true)
+    @comercios = Comercio.where(activo: true, habilitado: true).order(:nombre)
     render json: @comercios
   end
 
@@ -35,7 +35,7 @@ class ComerciosController < ApplicationController
         @comercio.update(url_foto: "https://s3.us-east-2.amazonaws.com/meta.app/#{@comercio.foto.key}")
    
     end
-    @comercios = current_usuario.comercios
+    @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercios
     #render json: {url_logo: "https://s3.sa-east-1.amazonaws.com/api.eira/#{@institucion.avatar.key}"}
   end
@@ -47,7 +47,7 @@ class ComerciosController < ApplicationController
     @comercio = Comercio.new(comercio_params)
     @comercio.usuario_id = current_usuario.id
     if @comercio.save
-     @comercios = current_usuario.comercios.where(activo: true)
+     @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercios
     else
       puts @comercio.errors.full_messages
@@ -58,7 +58,7 @@ class ComerciosController < ApplicationController
   # PATCH/PUT /comercios/1
   def update
     if @comercio.update(comercio_params)
-      @comercios = current_usuario.comercios.where(activo: true)
+      @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
       render json: @comercios
     else
       render json: @comercio.errors, status: :unprocessable_entity
@@ -69,7 +69,7 @@ class ComerciosController < ApplicationController
     @comercio = Comercio.find(params[:comercio_id])
     @comercio.habilitado = !@comercio.habilitado
     if @comercio.save
-      @comercios = Comercio.where(activo: true)
+      @comercios = Comercio.where(activo: true).order(:nombre)
       render json: @comercios
     else
       render json: @comercio.errors, status: :unprocessable_entity

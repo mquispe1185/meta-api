@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_20_213750) do
+ActiveRecord::Schema.define(version: 2020_10_17_213826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,24 @@ ActiveRecord::Schema.define(version: 2020_09_20_213750) do
     t.index ["provincia_id"], name: "index_localidades_on_provincia_id"
   end
 
+  create_table "promociones", force: :cascade do |t|
+    t.bigint "comercio_id"
+    t.bigint "usuario_id"
+    t.date "desde"
+    t.date "hasta"
+    t.string "titulo"
+    t.string "descripcion"
+    t.integer "duracion"
+    t.boolean "vencido"
+    t.integer "prioridad"
+    t.integer "estado"
+    t.boolean "habilitado"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["comercio_id"], name: "index_promociones_on_comercio_id"
+    t.index ["usuario_id"], name: "index_promociones_on_usuario_id"
+  end
+
   create_table "provincias", force: :cascade do |t|
     t.string "nombre"
     t.boolean "activo", default: true
@@ -188,6 +206,8 @@ ActiveRecord::Schema.define(version: 2020_09_20_213750) do
   add_foreign_key "horarios", "comercios"
   add_foreign_key "localidades", "departamentos"
   add_foreign_key "localidades", "provincias"
+  add_foreign_key "promociones", "comercios"
+  add_foreign_key "promociones", "usuarios"
   add_foreign_key "referencias", "comercios"
   add_foreign_key "referencias", "usuarios"
   add_foreign_key "usuarios", "departamentos"
