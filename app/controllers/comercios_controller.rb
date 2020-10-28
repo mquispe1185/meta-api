@@ -58,7 +58,11 @@ class ComerciosController < ApplicationController
   # PATCH/PUT /comercios/1
   def update
     if @comercio.update(comercio_params)
+      if current_usuario.rol_id == 1
+        @comercios = Comercio.where(activo: true).order(:nombre)
+      else
       @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
+      end
       render json: @comercios
     else
       render json: @comercio.errors, status: :unprocessable_entity
@@ -68,6 +72,9 @@ class ComerciosController < ApplicationController
   def habilitar
     @comercio = Comercio.find(params[:comercio_id])
     @comercio.habilitado = !@comercio.habilitado
+    if @comercio.habilitado
+        @comercio.usuario.update(rol_id: 2)
+    end
     if @comercio.save
       @comercios = Comercio.where(activo: true).order(:nombre)
       render json: @comercios

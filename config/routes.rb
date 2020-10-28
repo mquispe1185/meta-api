@@ -21,5 +21,6 @@ Rails.application.routes.draw do
   get '/listacomercios', to: 'comercios#index_inicio'
   get '/buscar', to: 'comercios#busqueda'
   get '/promos', to: 'promociones#index_main'
+  get '/mis_promos', to: 'promociones#mis_promos'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -1,6 +1,6 @@
 class PromocionesController < ApplicationController
   before_action :set_promocion, only: [:show, :update, :destroy]
-
+  before_action :authenticate_usuario!, only:[:create,:mis_promos]
   # GET /promociones
   def index
     @promociones = Promocion.all
@@ -12,6 +12,12 @@ class PromocionesController < ApplicationController
     @promociones = Promocion.all
     render json: @promociones, each_serializer: PromoShortSerializer
   end
+
+  def mis_promos
+    @promociones = current_usuario.promociones
+    render json: @promociones
+  end
+
   # GET /promociones/1
   def show
     render json: @promocion

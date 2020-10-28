@@ -12,4 +12,17 @@ class ComercioSerializer < ActiveModel::Serializer
     object.horarios.order(:dia)
   end
 
+
+  attribute :tipo_servicio_descripcion do 
+    case object.tipo_servicio
+    when 0
+      'GRATUITO'
+    when 1
+        'ECONOMICO'
+    when 2
+        'ESTANDAR'
+      when 3
+      'PREMIUM'
+      end
+  end
 end
