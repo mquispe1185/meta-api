@@ -26,9 +26,10 @@ class PromocionesController < ApplicationController
   # POST /promociones
   def create
     @promocion = Promocion.new(promocion_params)
-
+    @promocion.usuario_id = current_usuario.id
     if @promocion.save
-      render json: @promocion, status: :created, location: @promocion
+      @promociones = current_usuario.promociones
+      render json: @promociones, status: :created
     else
       render json: @promocion.errors, status: :unprocessable_entity
     end
