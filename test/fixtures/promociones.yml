@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  comercio_id: one
+  usuario_id: one
+  desde: 2020-10-17
+  hasta: 2020-10-17
+  titulo: MyString
+  descripcion: MyString
+  duracion: 1
+  vencido: false
+  prioridad: 1
+  estado: 1
+
+two:
+  comercio_id: two
+  usuario_id: two
+  desde: 2020-10-17
+  hasta: 2020-10-17
+  titulo: MyString
+  descripcion: MyString
+  duracion: 1
+  vencido: false
+  prioridad: 1
+  estado: 1

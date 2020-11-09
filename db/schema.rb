@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_04_032735) do
+ActiveRecord::Schema.define(version: 2020_10_17_213826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,10 @@ ActiveRecord::Schema.define(version: 2020_09_04_032735) do
     t.datetime "updated_at", null: false
     t.string "url_foto"
     t.string "tags"
+    t.boolean "habilitado", default: false
+    t.boolean "envio", default: false
+    t.integer "tipo_servicio", default: 0
+    t.integer "visitas", default: 0
     t.index ["departamento_id"], name: "index_comercios_on_departamento_id"
     t.index ["localidad_id"], name: "index_comercios_on_localidad_id"
     t.index ["provincia_id"], name: "index_comercios_on_provincia_id"
@@ -95,6 +99,24 @@ ActiveRecord::Schema.define(version: 2020_09_04_032735) do
     t.datetime "updated_at", null: false
     t.index ["departamento_id"], name: "index_localidades_on_departamento_id"
     t.index ["provincia_id"], name: "index_localidades_on_provincia_id"
+  end
+
+  create_table "promociones", force: :cascade do |t|
+    t.bigint "comercio_id"
+    t.bigint "usuario_id"
+    t.date "desde"
+    t.date "hasta"
+    t.string "titulo"
+    t.string "descripcion"
+    t.integer "duracion"
+    t.boolean "vencido"
+    t.integer "prioridad"
+    t.integer "estado"
+    t.boolean "habilitado"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["comercio_id"], name: "index_promociones_on_comercio_id"
+    t.index ["usuario_id"], name: "index_promociones_on_usuario_id"
   end
 
   create_table "provincias", force: :cascade do |t|
@@ -184,6 +206,8 @@ ActiveRecord::Schema.define(version: 2020_09_04_032735) do
   add_foreign_key "horarios", "comercios"
   add_foreign_key "localidades", "departamentos"
   add_foreign_key "localidades", "provincias"
+  add_foreign_key "promociones", "comercios"
+  add_foreign_key "promociones", "usuarios"
   add_foreign_key "referencias", "comercios"
   add_foreign_key "referencias", "usuarios"
   add_foreign_key "usuarios", "departamentos"

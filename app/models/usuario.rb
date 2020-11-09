@@ -12,7 +12,7 @@ class Usuario < ActiveRecord::Base
   belongs_to :provincia, optional: true
   belongs_to :departamento, optional: true
   belongs_to :localidad, optional: true
-
+  has_many :promociones
 
   after_create :rol
 

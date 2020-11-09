@@ -3,12 +3,17 @@ class ComerciosController < ApplicationController
   before_action :authenticate_usuario!, only:[:create,:set_foto,:mis_comercios]
   # GET /comercios
   def index
-    @comercios = Comercio.all
+    @comercios = Comercio.where(activo: true).order(:nombre)
+    render json: @comercios
+  end
+
+  def index_inicio
+    @comercios = Comercio.where(activo: true, habilitado: true).order(:nombre)
     render json: @comercios
   end
 
   def mis_comercios
-    @comercios = current_usuario.comercios
+    @comercios = current_usuario.comercios.order(:nombre)
     render json: @comercios
   end
 
@@ -27,10 +32,10 @@ class ComerciosController < ApplicationController
 
     @comercio.foto.attach(params[:foto])
     if @comercio.foto.attached?
-        @comercio.update(url_foto: "https://metaapp123.s3.us-east-2.amazonaws.com/#{@comercio.foto.key}")
+        @comercio.update(url_foto: "https://s3.us-east-2.amazonaws.com/meta.app/#{@comercio.foto.key}")
    
     end
-    @comercios = current_usuario.comercios
+    @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercios
     #render json: {url_logo: "https://s3.sa-east-1.amazonaws.com/api.eira/#{@institucion.avatar.key}"}
   end
@@ -42,7 +47,7 @@ class ComerciosController < ApplicationController
     @comercio = Comercio.new(comercio_params)
     @comercio.usuario_id = current_usuario.id
     if @comercio.save
-     @comercios = current_usuario.comercios.where(activo: true)
+     @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercios
     else
       puts @comercio.errors.full_messages
@@ -53,12 +58,41 @@ class ComerciosController < ApplicationController
   # PATCH/PUT /comercios/1
   def update
     if @comercio.update(comercio_params)
-      @comercios = current_usuario.comercios.where(activo: true)
+      if current_usuario.rol_id == 1
+        @comercios = Comercio.where(activo: true).order(:nombre)
+      else
+      @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
+      end
       render json: @comercios
     else
       render json: @comercio.errors, status: :unprocessable_entity
     end
   end
+
+  def habilitar
+    @comercio = Comercio.find(params[:comercio_id])
+    @comercio.habilitado = !@comercio.habilitado
+    if @comercio.habilitado
+        @comercio.usuario.update(rol_id: 2)
+    end
+    if @comercio.save
+      @comercios = Comercio.where(activo: true).order(:nombre)
+      render json: @comercios
+    else
+      render json: @comercio.errors, status: :unprocessable_entity
+    end
+  end
+
+  def add_visita
+    @comercio = Comercio.find(params[:comercio_id])
+    @comercio.visitas += 1
+    if @comercio.save
+      render json: @comercio
+    else
+      render json: @comercio.errors, status: :unprocessable_entity
+    end
+  end
+
 
   # DELETE /comercios/1
   def destroy
@@ -73,8 +107,8 @@ class ComerciosController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def comercio_params
-      params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id,
+      params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id, :tipo_servicio,:visitas,
         :facebook, :instagram, :twitter, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id, 
-        :descripcion, :usuario_id, :entrega, :activo,:foto,:tags)
+        :descripcion, :usuario_id, :entrega, :activo,:foto,:tags,:habilitado,:envio)
     end
 end
