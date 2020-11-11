@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_17_213826) do
+ActiveRecord::Schema.define(version: 2020_11_11_214804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,12 @@ ActiveRecord::Schema.define(version: 2020_10_17_213826) do
     t.index ["provincia_id"], name: "index_departamentos_on_provincia_id"
   end
 
+  create_table "formapagos", force: :cascade do |t|
+    t.string "descripcion"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "horarios", force: :cascade do |t|
     t.integer "dia"
     t.time "desde"
@@ -115,7 +121,9 @@ ActiveRecord::Schema.define(version: 2020_10_17_213826) do
     t.boolean "habilitado"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "formapago_id"
     t.index ["comercio_id"], name: "index_promociones_on_comercio_id"
+    t.index ["formapago_id"], name: "index_promociones_on_formapago_id"
     t.index ["usuario_id"], name: "index_promociones_on_usuario_id"
   end
 
@@ -207,6 +215,7 @@ ActiveRecord::Schema.define(version: 2020_10_17_213826) do
   add_foreign_key "localidades", "departamentos"
   add_foreign_key "localidades", "provincias"
   add_foreign_key "promociones", "comercios"
+  add_foreign_key "promociones", "formapagos"
   add_foreign_key "promociones", "usuarios"
   add_foreign_key "referencias", "comercios"
   add_foreign_key "referencias", "usuarios"
