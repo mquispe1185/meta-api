@@ -23,4 +23,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
     inflect.irregular 'rubro', 'rubros'
     inflect.irregular 'horario', 'horarios'
     inflect.irregular 'promocion', 'promociones'
+    inflect.irregular 'formapago', 'formapagos'
 end

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :formapagos
   resources :promociones
   resources :horarios
   resources :rubros
