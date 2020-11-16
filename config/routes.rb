@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :comercioplanes
+  resources :tipo_servicios
   resources :formapagos
   resources :promociones
   resources :horarios

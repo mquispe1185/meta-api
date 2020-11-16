@@ -24,4 +24,6 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
     inflect.irregular 'horario', 'horarios'
     inflect.irregular 'promocion', 'promociones'
     inflect.irregular 'formapago', 'formapagos'
+    inflect.irregular 'comercioplan', 'comercioplanes'
+    inflect.irregular 'tipo_servicio', 'tipo_servicios'
 end

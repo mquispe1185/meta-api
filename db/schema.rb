@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_11_214804) do
+ActiveRecord::Schema.define(version: 2020_11_16_043715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,23 @@ ActiveRecord::Schema.define(version: 2020_11_11_214804) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "comercioplanes", force: :cascade do |t|
+    t.bigint "comercio_id"
+    t.bigint "tipo_servicio_id"
+    t.bigint "formapago_id"
+    t.integer "estado", default: 0
+    t.date "desde"
+    t.date "hasta"
+    t.decimal "importe"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "usuario_id"
+    t.index ["comercio_id"], name: "index_comercioplanes_on_comercio_id"
+    t.index ["formapago_id"], name: "index_comercioplanes_on_formapago_id"
+    t.index ["tipo_servicio_id"], name: "index_comercioplanes_on_tipo_servicio_id"
+    t.index ["usuario_id"], name: "index_comercioplanes_on_usuario_id"
   end
 
   create_table "comercios", force: :cascade do |t|
@@ -62,12 +79,14 @@ ActiveRecord::Schema.define(version: 2020_11_11_214804) do
     t.string "tags"
     t.boolean "habilitado", default: false
     t.boolean "envio", default: false
-    t.integer "tipo_servicio", default: 0
     t.integer "visitas", default: 0
+    t.bigint "tipo_servicio_id"
+    t.integer "estado", default: 0
     t.index ["departamento_id"], name: "index_comercios_on_departamento_id"
     t.index ["localidad_id"], name: "index_comercios_on_localidad_id"
     t.index ["provincia_id"], name: "index_comercios_on_provincia_id"
     t.index ["rubro_id"], name: "index_comercios_on_rubro_id"
+    t.index ["tipo_servicio_id"], name: "index_comercios_on_tipo_servicio_id"
     t.index ["usuario_id"], name: "index_comercios_on_usuario_id"
   end
 
@@ -159,6 +178,14 @@ ActiveRecord::Schema.define(version: 2020_11_11_214804) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "tipo_servicios", force: :cascade do |t|
+    t.string "nombre"
+    t.string "descripcion"
+    t.decimal "importe", default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "usuarios", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -205,10 +232,15 @@ ActiveRecord::Schema.define(version: 2020_11_11_214804) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comercioplanes", "comercios"
+  add_foreign_key "comercioplanes", "formapagos"
+  add_foreign_key "comercioplanes", "tipo_servicios"
+  add_foreign_key "comercioplanes", "usuarios"
   add_foreign_key "comercios", "departamentos"
   add_foreign_key "comercios", "localidades"
   add_foreign_key "comercios", "provincias"
   add_foreign_key "comercios", "rubros"
+  add_foreign_key "comercios", "tipo_servicios"
   add_foreign_key "comercios", "usuarios"
   add_foreign_key "departamentos", "provincias"
   add_foreign_key "horarios", "comercios"

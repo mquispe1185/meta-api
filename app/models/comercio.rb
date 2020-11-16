@@ -4,6 +4,7 @@ class Comercio < ApplicationRecord
   belongs_to :localidad
   belongs_to :usuario
   belongs_to :rubro
+  belongs_to :tipo_servicio
   has_many :horarios, dependent: :destroy
 
   has_one_attached :foto, dependent: :destroy

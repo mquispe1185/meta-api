@@ -108,7 +108,7 @@ class ComerciosController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def comercio_params
       params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id, :tipo_servicio,:visitas,
-        :facebook, :instagram, :twitter, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id, 
+        :facebook, :instagram, :twitter, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id,:estado,
         :descripcion, :usuario_id, :entrega, :activo,:foto,:tags,:habilitado,:envio)
     end
 end
