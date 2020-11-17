@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_16_043715) do
+ActiveRecord::Schema.define(version: 2020_11_16_164846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,8 +47,11 @@ ActiveRecord::Schema.define(version: 2020_11_16_043715) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "usuario_id"
+    t.bigint "servicio_anterior_id"
+    t.integer "meses", default: 0
     t.index ["comercio_id"], name: "index_comercioplanes_on_comercio_id"
     t.index ["formapago_id"], name: "index_comercioplanes_on_formapago_id"
+    t.index ["servicio_anterior_id"], name: "index_comercioplanes_on_servicio_anterior_id"
     t.index ["tipo_servicio_id"], name: "index_comercioplanes_on_tipo_servicio_id"
     t.index ["usuario_id"], name: "index_comercioplanes_on_usuario_id"
   end
@@ -235,6 +238,7 @@ ActiveRecord::Schema.define(version: 2020_11_16_043715) do
   add_foreign_key "comercioplanes", "comercios"
   add_foreign_key "comercioplanes", "formapagos"
   add_foreign_key "comercioplanes", "tipo_servicios"
+  add_foreign_key "comercioplanes", "tipo_servicios", column: "servicio_anterior_id"
   add_foreign_key "comercioplanes", "usuarios"
   add_foreign_key "comercios", "departamentos"
   add_foreign_key "comercios", "localidades"
