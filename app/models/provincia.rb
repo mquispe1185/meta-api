@@ -22,13 +22,13 @@ class Provincia < ApplicationRecord
         result = JSON.parse(dto)
         result["departamentos"].each do |d|
             iddto = d['id']
-            nuevodto = Departamento.new(nombre: d['nombre'], provincia_id: 18)
+            nuevodto = Departamento.new(nombre: d['nombre'], provincia_id: 19)
             if nuevodto.save
                 loc= Net::HTTP.get URI('https://apis.datos.gob.ar/georef/api/localidades?departamento='+iddto+'&campos=nombre&max=100')
                 
                 resultl = JSON.parse(loc)
                 resultl["localidades"].each do |l|
-                Localidad.create(nombre: l['nombre'], departamento_id: nuevodto.id, provincia_id: 18)
+                Localidad.create(nombre: l['nombre'], departamento_id: nuevodto.id, provincia_id: 19)
                 end
             end
          

@@ -10,4 +10,12 @@ class Comercioplan < ApplicationRecord
    APROBADO = 1
    VENCIDO = 2
    RECHAZADO = 3
+
+   before_create :gen_code
+
+   private
+  def gen_code
+    self.codigo = SecureRandom.urlsafe_base64(4).downcase
+  end
+
 end

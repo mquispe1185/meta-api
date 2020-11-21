@@ -65,6 +65,7 @@ class ComercioplanesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def comercioplan_params
-      params.require(:comercioplan).permit(:comercio_id, :tipo_servicio_id,:servicio_anterior_id, :formapago_id, :estado, :desde, :hasta,:meses, :importe,:usuario_id)
+      params.require(:comercioplan).permit(:comercio_id, :tipo_servicio_id,:servicio_anterior_id, :formapago_id, :estado, 
+      :desde, :hasta,:meses, :importe,:usuario_id,:pagado,:codigo)
     end
 end

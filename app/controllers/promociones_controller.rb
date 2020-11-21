@@ -9,7 +9,9 @@ class PromocionesController < ApplicationController
   end
 
   def index_main
-    @promociones = Promocion.all
+    #@promociones = Promocion.all
+
+    @promociones = Promocion.where('hasta >= ?', Date.today)
     render json: @promociones, each_serializer: PromoShortSerializer
   end
 
