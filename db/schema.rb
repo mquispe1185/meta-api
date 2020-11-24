@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_18_121406) do
+ActiveRecord::Schema.define(version: 2020_11_21_105619) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,11 +141,15 @@ ActiveRecord::Schema.define(version: 2020_11_18_121406) do
     t.integer "duracion"
     t.boolean "vencido"
     t.integer "prioridad"
-    t.integer "estado"
+    t.integer "estado", default: 0
     t.boolean "habilitado"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "formapago_id"
+    t.decimal "importe", default: "0.0"
+    t.decimal "costo_diario", default: "0.0"
+    t.decimal "descuento", default: "0.0"
+    t.string "codigo"
     t.index ["comercio_id"], name: "index_promociones_on_comercio_id"
     t.index ["formapago_id"], name: "index_promociones_on_formapago_id"
     t.index ["usuario_id"], name: "index_promociones_on_usuario_id"

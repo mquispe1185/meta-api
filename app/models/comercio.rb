@@ -9,6 +9,7 @@ class Comercio < ApplicationRecord
 
   has_one_attached :foto, dependent: :destroy
 
+  before_create :servicio
    # ESTADOS DE COMERCIO
    DEFAULT = 0
    CONCAMBIOPENDIENTE = 1
@@ -21,4 +22,7 @@ class Comercio < ApplicationRecord
     end
   end
 
+  def servicio
+    self.tipo_servicio_id = 1
+  end
 end

@@ -46,6 +46,7 @@ class ComerciosController < ApplicationController
 
     @comercio = Comercio.new(comercio_params)
     @comercio.usuario_id = current_usuario.id
+    @comercio.tipo_servicio_id = 1
     if @comercio.save
      @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercios

@@ -3,7 +3,7 @@ class ProvinciasController < ApplicationController
 
   # GET /provincias
   def index
-    @provincias = Provincia.all
+    @provincias = Provincia.all.order(:nombre)
 
     render json: @provincias
   end
