@@ -30,7 +30,7 @@ development:
   host: database-meta.cvoudltgl8bv.us-east-2.rds.amazonaws.com
 =======
   username: postgres
-  password: postgres
+  password: admin
   host: localhost
 >>>>>>> 529d5cfcdc8fe997a7c77093b7ab379a40665389
   port: 5432

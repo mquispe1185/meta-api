@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :comercioplanes
+  resources :tipo_servicios
   resources :formapagos
   resources :promociones
   resources :horarios
@@ -16,6 +18,7 @@ Rails.application.routes.draw do
 
   put '/habilitar_usuario', to: 'usuarios#habilitar'
   put '/habilitar_comercio', to: 'comercios#habilitar'
+  put '/habilitar_promo', to: 'promociones#habilitar'
   put '/add_visita', to: 'comercios#add_visita'
   put '/set_foto', to: 'comercios#set_foto'
   get '/miscomercios', to: 'comercios#mis_comercios'

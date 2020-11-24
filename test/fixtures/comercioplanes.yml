@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  comercio: one
+  tipo_servicio: one
+  formapago: one
+  estado: 1
+  desde: 2020-11-12
+  hasta: 2020-11-12
+  importe: 9.99
+
+two:
+  comercio: two
+  tipo_servicio: two
+  formapago: two
+  estado: 1
+  desde: 2020-11-12
+  hasta: 2020-11-12
+  importe: 9.99

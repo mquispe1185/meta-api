@@ -9,7 +9,9 @@ class PromocionesController < ApplicationController
   end
 
   def index_main
-    @promociones = Promocion.all
+    #@promociones = Promocion.all
+
+    @promociones = Promocion.where('hasta >= ?', Date.today)
     render json: @promociones, each_serializer: PromoShortSerializer
   end
 
@@ -31,6 +33,7 @@ class PromocionesController < ApplicationController
       @promociones = current_usuario.promociones
       render json: @promociones, status: :created
     else
+      puts @promocion.errors.full_messages
       render json: @promocion.errors, status: :unprocessable_entity
     end
   end
@@ -44,6 +47,14 @@ class PromocionesController < ApplicationController
     end
   end
 
+  def habilitar
+    @promocion = Promocion.find(params[:id])
+    if @promocion.update(estado: params[:estado])
+      render json: @promocion
+    else
+      render json: @promocion.errors, status: :unprocessable_entity
+    end
+  end
   # DELETE /promociones/1
   def destroy
     @promocion.destroy
@@ -58,6 +69,6 @@ class PromocionesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def promocion_params
       params.require(:promocion).permit(:comercio_id, :usuario_id, :desde, :hasta, :titulo, :descripcion, :duracion, :vencido, 
-        :prioridad, :estado,:habilitado,:formapago_id)
+        :prioridad, :estado,:habilitado,:formapago_id,:importe,:costo_diario,:descuento,:codigo)
     end
 end

@@ -4,15 +4,16 @@ class Comercio < ApplicationRecord
   belongs_to :localidad
   belongs_to :usuario
   belongs_to :rubro
+  belongs_to :tipo_servicio
   has_many :horarios, dependent: :destroy
 
   has_one_attached :foto, dependent: :destroy
 
-  #tipo servicio
-  #0: gratuito
-  #1: economico
-  #2: estandar
-  #3: premium
+  before_create :servicio
+   # ESTADOS DE COMERCIO
+   DEFAULT = 0
+   CONCAMBIOPENDIENTE = 1
+
   def self.search(search)
     if search
       where('nombre ILIKE :search OR tags ILIKE :search', search: "%#{search}%")
@@ -21,4 +22,7 @@ class Comercio < ApplicationRecord
     end
   end
 
+  def servicio
+    self.tipo_servicio_id = 1
+  end
 end

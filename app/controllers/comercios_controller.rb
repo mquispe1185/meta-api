@@ -46,6 +46,7 @@ class ComerciosController < ApplicationController
 
     @comercio = Comercio.new(comercio_params)
     @comercio.usuario_id = current_usuario.id
+    @comercio.tipo_servicio_id = 1
     if @comercio.save
      @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercios
@@ -108,7 +109,7 @@ class ComerciosController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def comercio_params
       params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id, :tipo_servicio,:visitas,
-        :facebook, :instagram, :twitter, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id, 
+        :facebook, :instagram, :twitter, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id,:estado,
         :descripcion, :usuario_id, :entrega, :activo,:foto,:tags,:habilitado,:envio)
     end
 end
