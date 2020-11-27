@@ -48,8 +48,8 @@ class ComerciosController < ApplicationController
     @comercio.usuario_id = current_usuario.id
     @comercio.tipo_servicio_id = 1
     if @comercio.save
-     @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
-    render json: @comercios
+     #@comercios = current_usuario.comercios.where(activo: true).order(:nombre)
+    render json: @comercio
     else
       puts @comercio.errors.full_messages
       render json: @comercio.errors, status: :unprocessable_entity
