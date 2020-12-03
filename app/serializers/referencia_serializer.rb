@@ -1,4 +1,4 @@
 class ReferenciaSerializer < ActiveModel::Serializer
-  attributes :id, :cuerpo, :puntaje, :activo
-  has_one :usuario
+  attributes :id, :cuerpo, :puntaje
+  has_one :usuario, serializer: UsuarioShortSerializer
 end

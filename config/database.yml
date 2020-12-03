@@ -24,14 +24,14 @@ default: &default
 development:
   <<: *default
   database: dbmeta
-  username: metapostgres
-  password: <%= Rails.application.credentials.dig(:dbpass) %>
-  host: database-meta.cvoudltgl8bv.us-east-2.rds.amazonaws.com
+  # username: metapostgres
+  # password: <%= Rails.application.credentials.dig(:dbpass) %>
+  # host: database-meta.cvoudltgl8bv.us-east-2.rds.amazonaws.com
 
- # username: postgres
- # password: admin
- # host: localhost
- # port: 5432
+  username: postgres
+  password: admin
+  host: localhost
+  port: 5432
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.

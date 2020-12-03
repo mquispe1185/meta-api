@@ -1,9 +1,9 @@
 class ReferenciasController < ApplicationController
   before_action :set_referencia, only: [:show, :update, :destroy]
-
+  before_action :authenticate_usuario!, only:[:create]
   # GET /referencias
   def index
-    @referencias = Referencia.all
+    @referencias = Referencia.where(comercio_id: params[:comercio_id])
 
     render json: @referencias
   end
@@ -16,7 +16,8 @@ class ReferenciasController < ApplicationController
   # POST /referencias
   def create
     @referencia = Referencia.new(referencia_params)
-
+    @referencia.usuario_id = current_usuario.id
+    
     if @referencia.save
       render json: @referencia, status: :created, location: @referencia
     else
@@ -46,6 +47,6 @@ class ReferenciasController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def referencia_params
-      params.require(:referencia).permit(:cuerpo, :usuario_id, :puntaje, :activo)
+      params.require(:referencia).permit(:cuerpo, :usuario_id,:comercio_id, :puntaje, :activo)
     end
 end
