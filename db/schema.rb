@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_26_190711) do
+ActiveRecord::Schema.define(version: 2020_12_04_010929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,7 +139,7 @@ ActiveRecord::Schema.define(version: 2020_11_26_190711) do
     t.string "titulo"
     t.string "descripcion"
     t.integer "duracion"
-    t.boolean "vencido"
+    t.boolean "vencido", default: false
     t.integer "prioridad"
     t.integer "estado", default: 0
     t.boolean "habilitado"

@@ -22,6 +22,13 @@ class Comercio < ApplicationRecord
     end
   end
 
+  def self.searchrubro(search)
+    if search
+      joins(:rubro).where(rubros: {descripcion: search})
+    else
+      all
+    end
+  end
   def servicio
     self.tipo_servicio_id = 1
   end

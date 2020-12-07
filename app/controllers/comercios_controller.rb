@@ -8,7 +8,7 @@ class ComerciosController < ApplicationController
   end
 
   def index_inicio
-    @comercios = Comercio.where(activo: true, habilitado: true).order(:nombre)
+    @comercios = Comercio.where(activo: true, habilitado: true).order(:nombre).limit(9)
     render json: @comercios
   end
 
@@ -17,8 +17,18 @@ class ComerciosController < ApplicationController
     render json: @comercios
   end
 
+  def vermas
+    @comercios = Comercio.where(activo: true, habilitado: true).order(:nombre).limit(9).offset(params[:n])
+    render json: @comercios
+  end
+
   def busqueda
     @comercios = Comercio.search(params[:term])
+    render json: @comercios
+  end
+
+  def busqueda_rubro
+    @comercios = Comercio.searchrubro(params[:term])
     render json: @comercios
   end
 

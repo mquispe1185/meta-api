@@ -1,7 +1,13 @@
 class PromocionesController < ApplicationController
   before_action :set_promocion, only: [:show, :update, :destroy,:set_foto]
   before_action :authenticate_usuario!, only:[:create,:mis_promos,:set_foto]
-  # GET /promociones
+
+  #estado: 
+  #0:default/pendiente, 
+  #1:habilitado, 
+  #2:nohabilitado, 
+  #3:procesada y terminada
+  # GET /promociones utilizado por admin
   def index
     @promociones = Promocion.all
 
@@ -9,7 +15,7 @@ class PromocionesController < ApplicationController
   end
 
   def index_main
-    #@promociones = Promocion.all
+    #utilizado en el inicio
 
     @promociones = Promocion.where('hasta >= ?', Date.today)
     render json: @promociones, each_serializer: PromoShortSerializer
@@ -73,6 +79,10 @@ class PromocionesController < ApplicationController
     #render json: {url_logo: "https://s3.sa-east-1.amazonaws.com/api.eira/#{@institucion.avatar.key}"}
   end
 
+  def actualizacion_diaria
+    @promociones = Promocion.where('hasta < ?', Date.today)
+    @promociones.update(vencido: true)
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_promocion

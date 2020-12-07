@@ -24,8 +24,11 @@ Rails.application.routes.draw do
   put '/set_foto_promo', to: 'promociones#set_foto'
   get '/miscomercios', to: 'comercios#mis_comercios'
   get '/listacomercios', to: 'comercios#index_inicio'
+  get '/ver_mas', to: 'comercios#vermas'
   get '/buscar', to: 'comercios#busqueda'
+  get '/buscar_rubro', to: 'comercios#busqueda_rubro'
   get '/promos', to: 'promociones#index_main'
   get '/mis_promos', to: 'promociones#mis_promos'
+  get '/updatestatuspromo', to: 'promociones#actualizacion_diaria'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
