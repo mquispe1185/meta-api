@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_04_010929) do
+ActiveRecord::Schema.define(version: 2021_02_20_011922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 2020_12_04_010929) do
     t.decimal "descuento", default: "0.0"
     t.string "codigo"
     t.string "url"
+    t.boolean "activo", default: true
     t.index ["comercio_id"], name: "index_promociones_on_comercio_id"
     t.index ["formapago_id"], name: "index_promociones_on_formapago_id"
     t.index ["usuario_id"], name: "index_promociones_on_usuario_id"
