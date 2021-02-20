@@ -6,7 +6,7 @@ class Comercio < ApplicationRecord
   belongs_to :rubro
   belongs_to :tipo_servicio
   has_many :horarios, dependent: :destroy
-
+  has_many :promociones
   has_one_attached :foto, dependent: :destroy
 
   before_create :servicio
@@ -16,7 +16,7 @@ class Comercio < ApplicationRecord
 
   def self.search(search)
     if search
-      where('nombre ILIKE :search OR tags ILIKE :search', search: "%#{search}%")
+      where('nombre ILIKE :search OR tags ILIKE :search', search: "%#{search}%").where(activo: true)
     else
       all
     end
@@ -24,7 +24,7 @@ class Comercio < ApplicationRecord
 
   def self.searchrubro(search)
     if search
-      joins(:rubro).where(rubros: {descripcion: search})
+      joins(:rubro).where(rubros: {descripcion: search},activo: true)
     else
       all
     end

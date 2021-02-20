@@ -13,7 +13,7 @@ class ComerciosController < ApplicationController
   end
 
   def mis_comercios
-    @comercios = current_usuario.comercios.order(:nombre)
+    @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercios
   end
 
@@ -107,7 +107,8 @@ class ComerciosController < ApplicationController
 
   # DELETE /comercios/1
   def destroy
-    @comercio.destroy
+    @comercio.update(activo: false)
+    @comercio.promociones(activo: false)
   end
 
   private

@@ -17,12 +17,12 @@ class PromocionesController < ApplicationController
   def index_main
     #utilizado en el inicio
 
-    @promociones = Promocion.where('hasta >= ?', Date.today)
+    @promociones = Promocion.where('hasta >= ?', Date.today).where(activo: true)
     render json: @promociones, each_serializer: PromoShortSerializer
   end
 
   def mis_promos
-    @promociones = current_usuario.promociones
+    @promociones = current_usuario.promociones.where(activo: true)
     render json: @promociones
   end
 
