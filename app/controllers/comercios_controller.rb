@@ -108,7 +108,7 @@ class ComerciosController < ApplicationController
   # DELETE /comercios/1
   def destroy
     @comercio.update(activo: false)
-    @comercio.promociones(activo: false)
+    @comercio.promociones.update(activo: false)
   end
 
   private

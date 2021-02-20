@@ -16,7 +16,7 @@ class Comercio < ApplicationRecord
 
   def self.search(search)
     if search
-      where('nombre ILIKE :search OR tags ILIKE :search', search: "%#{search}%").where(activo: true)
+      where('nombre ILIKE :search OR tags ILIKE :search', search: "%#{search}%").where(activo: true, habilitado: true)
     else
       all
     end
@@ -24,7 +24,7 @@ class Comercio < ApplicationRecord
 
   def self.searchrubro(search)
     if search
-      joins(:rubro).where(rubros: {descripcion: search},activo: true)
+      joins(:rubro).where(rubros: {descripcion: search},activo: true, habilitado: true)
     else
       all
     end
