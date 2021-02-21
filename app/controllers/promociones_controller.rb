@@ -33,8 +33,13 @@ class PromocionesController < ApplicationController
 
   # POST /promociones
   def create
+   
     @promocion = Promocion.new(promocion_params)
     @promocion.usuario_id = current_usuario.id
+    if !params[:formapago_id].present?
+      @promocion.formapago_id = Formapago::SIN_DEFINIR
+    end
+
     if @promocion.save
       #@promociones = current_usuario.promociones
       render json: @promocion, status: :created
