@@ -3,7 +3,7 @@ class ComerciosController < ApplicationController
   before_action :authenticate_usuario!, only:[:create,:set_foto,:mis_comercios]
   # GET /comercios
   def index
-    @comercios = Comercio.where(activo: true).order(:created_at)
+    @comercios = Comercio.where(activo: true).order(created_at: :desc)
     render json: @comercios
   end
 
