@@ -3,7 +3,7 @@ class ComerciosController < ApplicationController
   before_action :authenticate_usuario!, only:[:create,:set_foto,:mis_comercios]
   # GET /comercios
   def index
-    @comercios = Comercio.where(activo: true).order(:nombre)
+    @comercios = Comercio.where(activo: true).order(:created_at)
     render json: @comercios
   end
 
@@ -121,6 +121,6 @@ class ComerciosController < ApplicationController
     def comercio_params
       params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id, :tipo_servicio,:visitas,
         :facebook, :instagram, :facebook_id, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id,:estado,
-        :descripcion, :usuario_id, :entrega, :activo,:foto,:tags,:habilitado,:envio)
+        :descripcion, :usuario_id, :entrega, :activo,:foto,:tags,:habilitado,:envio,:es_fanpage)
     end
 end

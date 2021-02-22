@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_20_225504) do
+ActiveRecord::Schema.define(version: 2021_02_22_195324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 2021_02_20_225504) do
     t.integer "visitas", default: 0
     t.bigint "tipo_servicio_id"
     t.integer "estado", default: 0
+    t.boolean "es_fanpage", default: false
     t.index ["departamento_id"], name: "index_comercios_on_departamento_id"
     t.index ["localidad_id"], name: "index_comercios_on_localidad_id"
     t.index ["provincia_id"], name: "index_comercios_on_provincia_id"
