@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_22_195324) do
+ActiveRecord::Schema.define(version: 2021_03_11_190855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,10 @@ ActiveRecord::Schema.define(version: 2021_02_22_195324) do
     t.bigint "tipo_servicio_id"
     t.integer "estado", default: 0
     t.boolean "es_fanpage", default: false
+    t.integer "visitas_face", default: 0
+    t.integer "visitas_ig", default: 0
+    t.integer "visitas_web", default: 0
+    t.integer "visitas_wsp", default: 0
     t.index ["departamento_id"], name: "index_comercios_on_departamento_id"
     t.index ["localidad_id"], name: "index_comercios_on_localidad_id"
     t.index ["provincia_id"], name: "index_comercios_on_provincia_id"
@@ -153,6 +157,7 @@ ActiveRecord::Schema.define(version: 2021_02_22_195324) do
     t.string "codigo"
     t.string "url"
     t.boolean "activo", default: true
+    t.integer "vistas", default: 0
     t.index ["comercio_id"], name: "index_promociones_on_comercio_id"
     t.index ["formapago_id"], name: "index_promociones_on_formapago_id"
     t.index ["usuario_id"], name: "index_promociones_on_usuario_id"

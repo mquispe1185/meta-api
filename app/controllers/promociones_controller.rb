@@ -97,6 +97,6 @@ class PromocionesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def promocion_params
       params.require(:promocion).permit(:comercio_id, :usuario_id, :desde, :hasta, :titulo, :descripcion, :duracion, :vencido, 
-        :prioridad, :estado,:habilitado,:formapago_id,:importe,:costo_diario,:descuento,:codigo,:imagen)
+        :prioridad, :estado,:habilitado,:formapago_id,:importe,:costo_diario,:descuento,:codigo,:imagen,:vistas)
     end
 end

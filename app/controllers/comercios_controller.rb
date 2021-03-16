@@ -104,6 +104,31 @@ class ComerciosController < ApplicationController
     end
   end
 
+  def add_visita_links
+    @comercio = Comercio.find(params[:comercio_id])
+    
+    case params[:link].to_i
+    when 1
+      @comercio.visitas_face += 1
+    when 2
+      @comercio.visitas_ig += 1
+    when 3
+      @comercio.visitas_web += 1
+    when 4
+      @comercio.visitas_wsp += 1
+    end
+
+    if @comercio.save
+      render json: @comercio
+    else
+      render json: @comercio.errors, status: :unprocessable_entity
+    end
+  end
+
+  def estadistica_links
+    @comercio = Comercio.find(params[:comercio_id])
+    render json: @comercio, serializer: ComercioEstadisticaSerializer
+  end
 
   # DELETE /comercios/1
   def destroy
@@ -121,6 +146,7 @@ class ComerciosController < ApplicationController
     def comercio_params
       params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id, :tipo_servicio,:visitas,
         :facebook, :instagram, :facebook_id, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id,:estado,
-        :descripcion, :usuario_id, :entrega, :activo,:foto,:tags,:habilitado,:envio,:es_fanpage)
+        :descripcion, :usuario_id, :entrega, :activo,:foto,:tags,:habilitado,:envio,:es_fanpage,
+        :visitas_face,:visitas_ig,:visitas_web)
     end
 end
