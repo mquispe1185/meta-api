@@ -9,27 +9,27 @@ class ComerciosController < ApplicationController
 
   def index_inicio
     @comercios = Comercio.where(activo: true, habilitado: true).order(:nombre).limit(9)
-    render json: @comercios
+    render json: @comercios, each_serializer: ComercioShortSerializer
   end
 
   def mis_comercios
     @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
-    render json: @comercios
+    render json: @comercios, each_serializer: MisComerciosSerializer
   end
 
   def vermas
     @comercios = Comercio.where(activo: true, habilitado: true).order(:nombre).limit(9).offset(params[:n])
-    render json: @comercios
+    render json: @comercios, each_serializer: ComercioShortSerializer
   end
 
   def busqueda
     @comercios = Comercio.search(params[:term])
-    render json: @comercios
+    render json: @comercios, each_serializer: ComercioShortSerializer
   end
 
   def busqueda_rubro
     @comercios = Comercio.searchrubro(params[:term])
-    render json: @comercios
+    render json: @comercios, each_serializer: ComercioShortSerializer
   end
 
   # GET /comercios/1

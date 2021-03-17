@@ -1,8 +1,7 @@
-class ComercioSerializer < ActiveModel::Serializer
+class MisComerciosSerializer < ActiveModel::Serializer
   #usado en index para admin
   attributes :id, :nombre, :domicilio, :telefono, :celular, :web, :facebook, :instagram, :url_foto,:tags,:habilitado, :estado,
   :facebook_id, :latitud, :longitud, :email, :descripcion, :entrega, :rubro_id, :provincia_id, :departamento_id, :localidad_id,
-  :visitas, :visitas_face, :visitas_ig, :visitas_web, :visitas_wsp,
   :envio,:es_fanpage
   has_one :provincia
   has_one :departamento
@@ -11,4 +10,7 @@ class ComercioSerializer < ActiveModel::Serializer
   has_one :usuario
   has_one :tipo_servicio
 
+  has_many :horarios do
+    object.horarios.order(:dia)
+  end
 end
