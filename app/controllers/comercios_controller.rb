@@ -130,6 +130,10 @@ class ComerciosController < ApplicationController
     render json: @comercio, serializer: ComercioEstadisticaSerializer
   end
 
+  def enviar_consulta
+    puts "aqui"
+    ConsultaMailer.send_consulta(params[:nombre],params[:email],params[:consulta]).deliver_now
+  end
   # DELETE /comercios/1
   def destroy
     @comercio.update(activo: false)
