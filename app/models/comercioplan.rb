@@ -1,10 +1,10 @@
 class Comercioplan < ApplicationRecord
   belongs_to :comercio
   belongs_to :tipo_servicio
-  belongs_to :servicio_anterior, :class_name => 'TipoServicio'
+  belongs_to :servicio_anterior, :class_name => 'TipoServicio', optional: true
   belongs_to :formapago
   belongs_to :usuario
-
+  enum estado: %i[pendiente aprobado vencido rechazado]
    # ESTADOS DE PLANES
    PENDIENTE = 0
    APROBADO = 1
@@ -13,7 +13,7 @@ class Comercioplan < ApplicationRecord
 
    before_create :gen_code
 
-   private
+  private
   def gen_code
     self.codigo = SecureRandom.urlsafe_base64(4).downcase
   end
