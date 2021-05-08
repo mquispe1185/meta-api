@@ -10,6 +10,7 @@ class Comercio < ApplicationRecord
   has_one_attached :foto, dependent: :destroy
 
   before_create :servicio
+  after_create :set_comercioplan
    # ESTADOS DE COMERCIO
    DEFAULT = 0
    CONCAMBIOPENDIENTE = 1
@@ -29,7 +30,14 @@ class Comercio < ApplicationRecord
       all
     end
   end
+  
   def servicio
-    self.tipo_servicio_id = 1
+    self.tipo_servicio_id = TipoServicio::ESTANDAR
+  end
+
+  def set_comercioplan
+    Comercioplan.create(comercio: self, tipo_servicio: tipo_servicio, formapago: Formapago.first,
+      estado: :aprobado, desde: Time.now, hasta: 30.days.from_now,
+      importe: 0, usuario: usuario, meses: 1, pagado: true)
   end
 end
