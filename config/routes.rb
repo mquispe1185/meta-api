@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   put '/set_foto_promo', to: 'promociones#set_foto'
   get '/miscomercios', to: 'comercios#mis_comercios'
   get '/listacomercios', to: 'comercios#index_inicio'
+  get '/mis_comercioplanes', to: 'comercioplanes#mis_planes'
   get '/estadistica_links', to: 'comercios#estadistica_links'
   get '/ver_mas', to: 'comercios#vermas'
   get '/buscar', to: 'comercios#busqueda'

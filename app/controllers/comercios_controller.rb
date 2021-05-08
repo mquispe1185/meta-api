@@ -131,7 +131,6 @@ class ComerciosController < ApplicationController
   end
 
   def enviar_consulta
-    puts "aqui"
     ConsultaMailer.send_consulta(params[:nombre],params[:email],params[:consulta]).deliver_now
   end
   # DELETE /comercios/1

@@ -13,7 +13,7 @@ class Usuario < ActiveRecord::Base
   belongs_to :departamento, optional: true
   belongs_to :localidad, optional: true
   has_many :promociones
-
+  has_many :comercioplanes
   after_create :rol
 
     def rol
