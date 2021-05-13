@@ -53,12 +53,14 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.action_mailer.delivery_method = :smtp
+  host = 'metacerca.com.ar' #replace with your own url
+  config.action_mailer.default_url_options = { host: host }
   config.action_mailer.smtp_settings = {
-    :user_name => '1436b27c46ef95',
-    :password => '02b91434cfab6c',
-    :address => 'smtp.mailtrap.io',
-    :domain => 'smtp.mailtrap.io',
-    :port => '2525',
-    :authentication => :cram_md5
-  }
+    :user_name => Rails.application.credentials.dig(:gmail, :username),
+    :password => Rails.application.credentials.dig(:gmail, :password),
+    :address => 'smtp.gmail.com',
+    :port => '587',
+    :authentication => 'plain',
+    :enable_starttls_auto => true
+  } 
 end
