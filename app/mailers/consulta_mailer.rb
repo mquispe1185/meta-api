@@ -10,6 +10,6 @@ class ConsultaMailer < ApplicationMailer
     @nombre = nombre
     @email = email
     @consulta = consulta
-    mail to: "to@example.org"
+    mail to: "metacerca@gmail.com"
   end
 end
