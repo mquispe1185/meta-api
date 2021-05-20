@@ -1,16 +1,27 @@
 class ComercioplanesController < ApplicationController
   before_action :set_comercioplan, only: [:show, :update, :destroy]
-  before_action :authenticate_usuario!, only:[:create, :misplanes]
+  before_action :authenticate_usuario!, only:[:create, :misplanes,:index]
   # GET /comercioplanes
-  def index
-    @comercioplanes = Comercioplan.all
-    render json: @comercioplanes
-  end
+  # def index
+  #   @comercioplanes = Comercioplan.all
+  #   render json: @comercioplanes.order(desde: :desc)
+  # end
 
-  def mis_planes
-    @comercioplanes = current_usuario.comercioplanes
+  # def mis_planes
+  #   @comercioplanes = current_usuario.comercioplanes
+  #   render json: @comercioplanes
+  # end
+
+  def index 
+    if current_usuario.rol_id ==1
+      @comercioplanes = Comercioplan.all.order(desde: :desc)
+      #render json: @comercioplanes.order(desde: :desc)
+    else 
+      @comercioplanes = current_usuario.comercioplanes.order(desde: :desc)
+    end 
     render json: @comercioplanes
-  end
+  end 
+
   # GET /comercioplanes/1
   def show
     render json: @comercioplan

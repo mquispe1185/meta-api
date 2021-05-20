@@ -3,7 +3,7 @@ class ComercioSerializer < ActiveModel::Serializer
   attributes :id, :nombre, :domicilio, :telefono, :celular, :web, :facebook, :instagram, :url_foto,:tags,:habilitado, :estado,
   :facebook_id, :latitud, :longitud, :email, :descripcion, :entrega, :rubro_id, :provincia_id, :departamento_id, :localidad_id,
   :visitas, :visitas_face, :visitas_ig, :visitas_web, :visitas_wsp,
-  :envio,:es_fanpage
+  :envio,:es_fanpage, :created_at
   has_one :provincia
   has_one :departamento
   has_one :localidad
