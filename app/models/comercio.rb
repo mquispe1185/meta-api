@@ -12,9 +12,10 @@ class Comercio < ApplicationRecord
 
   before_create :servicio
   after_create :set_comercioplan
-   # ESTADOS DE COMERCIO
-   DEFAULT = 0
-   CONCAMBIOPENDIENTE = 1
+  # ESTADOS DE PLAN ACTUAL DE COMERCIO
+  enum estado: %i[default cambio_pendiente]
+
+
 
   def self.search(search)
     if search

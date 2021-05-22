@@ -14,10 +14,10 @@ class ComercioplanesController < ApplicationController
 
   def index 
     if current_usuario.rol_id ==1
-      @comercioplanes = Comercioplan.all.order(desde: :desc)
+      @comercioplanes = Comercioplan.all.order(created_at: :desc)
       #render json: @comercioplanes.order(desde: :desc)
     else 
-      @comercioplanes = current_usuario.comercioplanes.order(desde: :desc)
+      @comercioplanes = current_usuario.comercioplanes.order(created_at: :desc)
     end 
     render json: @comercioplanes
   end 
@@ -29,13 +29,11 @@ class ComercioplanesController < ApplicationController
 
   # POST /comercioplanes
   def create
-    @comercioplan = Comercioplan.new(comercioplan_params)
+    @comercioplan = current_usuario.comercioplanes.new(comercioplan_params)
     comercio = @comercioplan.comercio
-    @comercioplan.usuario_id = current_usuario.id
     @comercioplan.servicio_anterior_id = comercio.tipo_servicio_id
     if @comercioplan.save
-      
-      comercio.update(estado: 1, tipo_servicio_id: @comercioplan.tipo_servicio_id)
+      comercio.update(estado: :cambio_pendiente, tipo_servicio_id: @comercioplan.tipo_servicio_id)
       render json: comercio, status: :created, serializer: ComercioSerializer
     else
       render json: @comercioplan.errors.full_messages, status: :unprocessable_entity
@@ -53,7 +51,8 @@ class ComercioplanesController < ApplicationController
         @comercioplan.update(desde: nil, hasta: nil)
       when Comercioplan::APROBADO
         comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.tipo_servicio_id)
-        @comercioplan.update(desde: Date.today, hasta: Date.today + @comercioplan.meses.months)
+        @comercioplan.update(meses: 3,desde: Date.today, hasta: Date.today + @comercioplan.meses.months)
+        @comercioplan.update(formapago_id: 2)
       when Comercioplan::VENCIDO
         comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: 1)
       when Comercioplan::RECHAZADO

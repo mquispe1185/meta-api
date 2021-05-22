@@ -11,11 +11,16 @@ class Comercioplan < ApplicationRecord
    VENCIDO = 2
    RECHAZADO = 3
 
-   before_create :gen_code
+   before_create :gen_code, :set_duracion
 
   private
   def gen_code
     self.codigo = SecureRandom.urlsafe_base64(4).downcase
+  end
+  
+  def set_duracion
+    self.desde = Date.today
+    self.hasta = meses.months.from_now
   end
 
 end

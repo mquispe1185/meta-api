@@ -4,7 +4,6 @@ class HorariosController < ApplicationController
   # GET /horarios
   def index
     @horarios = Horario.all
-
     render json: @horarios
   end
 
@@ -15,12 +14,10 @@ class HorariosController < ApplicationController
 
   # POST /horarios
   def create
-   
     datos = horarios_params[:horarios]
     comercio = Comercio.find(datos[0][:comercio_id])
     datos.each do |horario|
-      Horario.create(horario)
-     
+    Horario.create(horario)
     end
     @horarios = comercio.horarios.order(:dia)
     render json: @horarios
@@ -38,7 +35,6 @@ class HorariosController < ApplicationController
   # DELETE /horarios/1
   def destroy
     comercio = Comercio.find(@horario.comercio_id)
-    
     @horario.destroy
     @horarios = comercio.horarios.order(:dia)
     render json: @horarios
