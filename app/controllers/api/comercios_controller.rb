@@ -1,4 +1,4 @@
-class ComerciosController < ApplicationController
+class Api::ComerciosController < ApplicationController
   before_action :set_comercio, only: [:show, :update, :destroy,:set_foto]
   before_action :authenticate_usuario!, only:[:create,:set_foto,:mis_comercios]
   # GET /comercios

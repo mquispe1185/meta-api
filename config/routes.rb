@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  namespace :api do
   resources :comercioplanes
   resources :tipo_servicios
   resources :formapagos
@@ -12,9 +13,6 @@ Rails.application.routes.draw do
   resources :provincias
   resources :roles
   resources :usuarios
-  mount_devise_token_auth_for 'Usuario', at: 'auth', controllers: {
-    omniauth_callbacks: "overrides/omniauth_callbacks"
-  }
 
   put '/habilitar_usuario', to: 'usuarios#habilitar'
   put '/habilitar_comercio', to: 'comercios#habilitar'
@@ -34,5 +32,10 @@ Rails.application.routes.draw do
   get '/mis_promos', to: 'promociones#mis_promos'
   get '/updatestatuspromo', to: 'promociones#actualizacion_diaria'
   post '/send_consulta', to: 'comercios#enviar_consulta'
+  mount_devise_token_auth_for 'Usuario', at: 'auth', controllers: {
+    omniauth_callbacks: "overrides/omniauth_callbacks"
+  }
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  end
+
 end
