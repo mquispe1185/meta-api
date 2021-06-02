@@ -1,4 +1,4 @@
-class FormapagosController < ApplicationController
+class Api::FormapagosController < ApplicationController
   before_action :set_formapago, only: [:show, :update, :destroy]
 
   # GET /formapagos

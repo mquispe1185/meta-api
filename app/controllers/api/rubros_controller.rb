@@ -1,4 +1,4 @@
-class RubrosController < ApplicationController
+class Api::RubrosController < ApplicationController
   before_action :set_rubro, only: [:show, :update, :destroy]
 
   # GET /rubros

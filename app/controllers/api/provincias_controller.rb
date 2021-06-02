@@ -1,4 +1,4 @@
-class ProvinciasController < ApplicationController
+class Api::ProvinciasController < ApplicationController
   before_action :set_provincia, only: [:show, :update, :destroy]
 
   # GET /provincias

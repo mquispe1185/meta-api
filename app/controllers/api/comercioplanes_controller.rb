@@ -1,4 +1,4 @@
-class ComercioplanesController < ApplicationController
+class Api::ComercioplanesController < ApplicationController
   before_action :set_comercioplan, only: [:show, :update, :destroy]
   before_action :authenticate_usuario!, only:[:create, :misplanes,:index]
   # GET /comercioplanes

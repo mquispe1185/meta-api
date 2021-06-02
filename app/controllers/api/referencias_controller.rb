@@ -1,4 +1,4 @@
-class ReferenciasController < ApplicationController
+class Api::ReferenciasController < ApplicationController
   before_action :set_referencia, only: [:show, :update, :destroy]
   before_action :authenticate_usuario!, only:[:create]
   # GET /referencias

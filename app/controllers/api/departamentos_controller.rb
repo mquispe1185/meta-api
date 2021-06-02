@@ -1,4 +1,4 @@
-class DepartamentosController < ApplicationController
+class Api::DepartamentosController < ApplicationController
   before_action :set_departamento, only: [:show, :update, :destroy]
 
   # GET /departamentos

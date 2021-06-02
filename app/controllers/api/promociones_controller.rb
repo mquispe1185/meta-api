@@ -1,4 +1,4 @@
-class PromocionesController < ApplicationController
+class Api::PromocionesController < ApplicationController
   before_action :set_promocion, only: [:show, :update, :destroy,:set_foto]
   before_action :authenticate_usuario!, only:[:create,:mis_promos,:set_foto]
 

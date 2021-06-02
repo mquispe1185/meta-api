@@ -1,4 +1,4 @@
-class RolesController < ApplicationController
+class Api::RolesController < ApplicationController
   before_action :set_rol, only: [:show, :update, :destroy]
 
   # GET /roles

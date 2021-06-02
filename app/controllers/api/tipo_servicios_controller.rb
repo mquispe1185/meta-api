@@ -1,4 +1,4 @@
-class TipoServiciosController < ApplicationController
+class Api::TipoServiciosController < ApplicationController
   before_action :set_tipo_servicio, only: [:show, :update, :destroy]
 
   # GET /tipo_servicios

@@ -1,4 +1,4 @@
-class LocalidadesController < ApplicationController
+class Api::LocalidadesController < ApplicationController
   before_action :set_localidad, only: [:show, :update, :destroy]
 
   # GET /localidades

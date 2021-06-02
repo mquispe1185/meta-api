@@ -1,4 +1,4 @@
-class HorariosController < ApplicationController
+class Api::HorariosController < ApplicationController
   before_action :set_horario, only: [:show, :update, :destroy]
 #  before_action :authenticate_usuario!, only:[:create]
   # GET /horarios
