@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   namespace :api do
-    resources :comercioplanes
+    resources :comercioplanes do 
+      put :admin_update, on: :member
+    end
     resources :tipo_servicios
     resources :formapagos
     resources :promociones

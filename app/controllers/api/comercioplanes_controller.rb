@@ -1,6 +1,6 @@
 class Api::ComercioplanesController < ApplicationController
-  before_action :set_comercioplan, only: [:show, :update, :destroy]
-  before_action :authenticate_usuario!, only:[:create, :misplanes,:index]
+  before_action :set_comercioplan, only: [:show, :update, :destroy, :admin_update]
+  before_action :authenticate_usuario!, only:[:misplanes,:index]
   # GET /comercioplanes
   # def index
   #   @comercioplanes = Comercioplan.all
@@ -14,10 +14,9 @@ class Api::ComercioplanesController < ApplicationController
 
   def index 
     if current_usuario.rol_id ==1
-      @comercioplanes = Comercioplan.all.order(created_at: :desc)
-      #render json: @comercioplanes.order(desde: :desc)
+      @comercioplanes = Comercioplan.activos.order(created_at: :desc)
     else 
-      @comercioplanes = current_usuario.comercioplanes.order(created_at: :desc)
+      @comercioplanes = current_usuario.comercioplanes.activos.order(created_at: :desc)
     end 
     render json: @comercioplanes
   end 
@@ -29,6 +28,35 @@ class Api::ComercioplanesController < ApplicationController
 
   # POST /comercioplanes
   def create
+    # SDK de Mercado Pago
+    # require 'mercadopago'
+    # Agrega credenciales
+    # sdk = Mercadopago::SDK.new('APP_USR-2484239835628727-052600-82909dea192293e8f3598e6660d3a6e8-765237875')
+    # Crea un objeto de preferencia
+    # preference_data = {
+    # items: [
+    #   {
+    #   title: 'Plan Nuevo',
+    #   unit_price: 75,
+    #   quantity: 1
+    #   }
+    # ],
+    # back_urls: {
+    #   success: 'http://localhost:4200/comerciopanel',
+    #   failure: 'http://localhost:4200/comerciopanel',
+    #   pending: 'http://localhost:4200/comerciopanel'
+    # },
+    # }
+    # preference_response = sdk.preference.create(preference_data)
+    # preference = preference_response[:response]
+
+    # Este valor reemplazará el string "<%= @preference_id %>" en tu HTML
+    # @preference_id = preference['id']
+    # render json: {preference_id: @preference_id}
+    # puts "----------------------------"
+    # puts @preference_id
+
+
     @comercioplan = current_usuario.comercioplanes.new(comercioplan_params)
     comercio = @comercioplan.comercio
     @comercioplan.servicio_anterior_id = comercio.tipo_servicio_id
@@ -51,8 +79,7 @@ class Api::ComercioplanesController < ApplicationController
         @comercioplan.update(desde: nil, hasta: nil)
       when Comercioplan::APROBADO
         comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.tipo_servicio_id)
-        @comercioplan.update(meses: 3,desde: Date.today, hasta: Date.today + @comercioplan.meses.months)
-        @comercioplan.update(formapago_id: 2)
+        @comercioplan.update(desde: Date.today, hasta: Date.today + @comercioplan.meses.months)
       when Comercioplan::VENCIDO
         comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: 1)
       when Comercioplan::RECHAZADO
@@ -68,6 +95,14 @@ class Api::ComercioplanesController < ApplicationController
   # DELETE /comercioplanes/1
   def destroy
     @comercioplan.destroy
+  end
+
+  def admin_update
+    if @comercioplan.update(comercioplan_params)
+      render json: @comercioplan
+    else
+      render json: @comercioplan.errors.full_messages, status: :unprocessable_entity
+    end
   end
 
   private

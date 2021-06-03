@@ -12,7 +12,8 @@ class Comercioplan < ApplicationRecord
    RECHAZADO = 3
 
    before_create :gen_code, :set_duracion
-
+   scope :activos, -> { where(activo: true) }
+   
   private
   def gen_code
     self.codigo = SecureRandom.urlsafe_base64(4).downcase

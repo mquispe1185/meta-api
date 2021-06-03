@@ -5,9 +5,9 @@ class Comercio < ApplicationRecord
   belongs_to :usuario
   belongs_to :rubro
   belongs_to :tipo_servicio
-  has_many :horarios, dependent: :destroy
+  has_many :horarios, -> { order(:dia, :desde) }, dependent: :destroy
   has_many :promociones
-  has_many :comercioplanes
+  has_many :comercioplanes, dependent: :destroy
   has_one_attached :foto, dependent: :destroy
 
   before_create :servicio
@@ -15,7 +15,7 @@ class Comercio < ApplicationRecord
   # ESTADOS DE PLAN ACTUAL DE COMERCIO
   enum estado: %i[default cambio_pendiente]
 
-
+  scope :activos, -> { where(activo: true) }
 
   def self.search(search)
     if search

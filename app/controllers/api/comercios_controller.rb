@@ -39,11 +39,9 @@ class Api::ComerciosController < ApplicationController
 
   def set_foto
     @comercio.foto.purge
-
     @comercio.foto.attach(params[:foto])
     if @comercio.foto.attached?
         @comercio.update(url_foto: "https://s3.us-east-2.amazonaws.com/meta.app/#{@comercio.foto.key}")
-   
     end
     @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercios
@@ -53,7 +51,6 @@ class Api::ComerciosController < ApplicationController
 
   # POST /comercios
   def create
-
     @comercio = Comercio.new(comercio_params)
     @comercio.usuario_id = current_usuario.id
     @comercio.tipo_servicio_id = 1
@@ -137,6 +134,7 @@ class Api::ComerciosController < ApplicationController
   def destroy
     @comercio.update(activo: false)
     @comercio.promociones.update(activo: false)
+    @comercio.comercioplanes.update(activo: false)
   end
 
   private

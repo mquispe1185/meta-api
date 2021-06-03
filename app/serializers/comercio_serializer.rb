@@ -10,8 +10,5 @@ class ComercioSerializer < ActiveModel::Serializer
   has_one :rubro
   has_one :usuario
   has_one :tipo_servicio
-  # DANI DANI has_many :horarios
-  has_many :horarios do
-    object.horarios.order(:dia)
-  end
+  has_many :horarios
 end
