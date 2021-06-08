@@ -16,6 +16,7 @@ class Comercio < ApplicationRecord
   enum estado: %i[default cambio_pendiente]
 
   scope :activos, -> { where(activo: true) }
+  scope :inactivos, -> { where(activo: false) }
 
   def self.search(search)
     if search

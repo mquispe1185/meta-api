@@ -34,7 +34,7 @@ class Api::ComerciosController < ApplicationController
 
   # GET /comercios/1
   def show
-    render json: @comercio
+    render json: @comercio, serializer: ComercioVisitanteSerializer
   end
 
   def set_foto

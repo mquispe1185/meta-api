@@ -1,5 +1,6 @@
+# usado en index para admin
+
 class ComercioSerializer < ActiveModel::Serializer
-  #usado en index para admin
   attributes :id, :nombre, :domicilio, :telefono, :celular, :web, :facebook, :instagram, :url_foto,:tags,:habilitado, :estado,
   :facebook_id, :latitud, :longitud, :email, :descripcion, :entrega, :rubro_id, :provincia_id, :departamento_id, :localidad_id,
   :visitas, :visitas_face, :visitas_ig, :visitas_web, :visitas_wsp,

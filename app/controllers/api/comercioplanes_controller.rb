@@ -1,17 +1,8 @@
 class Api::ComercioplanesController < ApplicationController
   before_action :set_comercioplan, only: [:show, :update, :destroy, :admin_update]
   before_action :authenticate_usuario!, only:[:misplanes,:index]
+  
   # GET /comercioplanes
-  # def index
-  #   @comercioplanes = Comercioplan.all
-  #   render json: @comercioplanes.order(desde: :desc)
-  # end
-
-  # def mis_planes
-  #   @comercioplanes = current_usuario.comercioplanes
-  #   render json: @comercioplanes
-  # end
-
   def index 
     if current_usuario.rol_id ==1
       @comercioplanes = Comercioplan.activos.order(created_at: :desc)
@@ -61,7 +52,7 @@ class Api::ComercioplanesController < ApplicationController
     comercio = @comercioplan.comercio
     @comercioplan.servicio_anterior_id = comercio.tipo_servicio_id
     if @comercioplan.save
-      comercio.update(estado: :cambio_pendiente, tipo_servicio_id: @comercioplan.tipo_servicio_id)
+      comercio.update(estado: :cambio_pendiente)
       render json: comercio, status: :created, serializer: ComercioSerializer
     else
       render json: @comercioplan.errors.full_messages, status: :unprocessable_entity
@@ -73,13 +64,17 @@ class Api::ComercioplanesController < ApplicationController
     if @comercioplan.update(comercioplan_params)
      
       comercio = @comercioplan.comercio
-      case @comercioplan.estado
+      case @comercioplan.read_attribute_before_type_cast(:estado)
       when Comercioplan::PENDIENTE 
-        comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.servicio_anterior_id)
+        puts 'op pend'
+        # comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.servicio_anterior_id)
+        comercio.update(estado: :cambio_pendiente, tipo_servicio_id: @comercioplan.servicio_anterior_id)
         @comercioplan.update(desde: nil, hasta: nil)
       when Comercioplan::APROBADO
-        comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.tipo_servicio_id)
-        @comercioplan.update(desde: Date.today, hasta: Date.today + @comercioplan.meses.months)
+        puts 'op aprobado'
+        # comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.tipo_servicio_id)
+        comercio.update(estado: :default, tipo_servicio_id: @comercioplan.tipo_servicio_id)
+        @comercioplan.update(estado: :aprobado,desde: Date.today, hasta: Date.today + @comercioplan.meses.months)
       when Comercioplan::VENCIDO
         comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: 1)
       when Comercioplan::RECHAZADO

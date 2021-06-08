@@ -1,5 +1,6 @@
+#Utilizado para MIS COMERCIOS vista del Comerciante.
+
 class MisComerciosSerializer < ActiveModel::Serializer
-  #usado en index para admin
   attributes :id, :nombre, :domicilio, :telefono, :celular, :web, :facebook, :instagram, :url_foto,:tags,:habilitado, :estado,
   :facebook_id, :latitud, :longitud, :email, :descripcion, :entrega, :rubro_id, :provincia_id, :departamento_id, :localidad_id,
   :envio,:es_fanpage
@@ -10,4 +11,8 @@ class MisComerciosSerializer < ActiveModel::Serializer
   has_one :usuario
   has_one :tipo_servicio
   has_many :horarios 
+
+  attribute :plan_hasta do 
+  	object.comercioplanes.vigente.hasta
+  end
 end
