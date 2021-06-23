@@ -1,4 +1,4 @@
 class Formapago < ApplicationRecord
     # valor por defecto
-    SIN_DEFINIR = 3
+    GRATUITO = 3
 end

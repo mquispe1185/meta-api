@@ -7,22 +7,21 @@ class Api::PromocionesController < ApplicationController
   #1:habilitado, 
   #2:nohabilitado, 
   #3:procesada y terminada
+
   # GET /promociones utilizado por admin
   def index
-    @promociones = Promocion.all
-
+    @promociones = Promocion.all.order(created_at: :desc)
     render json: @promociones
   end
 
   def index_main
     #utilizado en el inicio
-
     @promociones = Promocion.where('hasta >= ?', Date.today).where(activo: true)
     render json: @promociones, each_serializer: PromoShortSerializer
   end
 
   def mis_promos
-    @promociones = current_usuario.promociones.where(activo: true)
+    @promociones = current_usuario.promociones.where(activo: true).order(created_at: :desc)
     render json: @promociones
   end
 
@@ -32,16 +31,35 @@ class Api::PromocionesController < ApplicationController
   end
 
   # POST /promociones
+  # def create
+   
+  #   @promocion = Promocion.new(promocion_params)
+  #   @promocion.usuario_id = current_usuario.id
+  #   if !params[:formapago_id].present?
+  #     @promocion.formapago_id = Formapago::SIN_DEFINIR
+  #   end
+
+  #   if @promocion.save
+  #     #@promociones = current_usuario.promociones
+  #     render json: @promocion, status: :created
+  #   else
+  #     puts @promocion.errors.full_messages
+  #     render json: @promocion.errors, status: :unprocessable_entity
+  #   end
+  # end
+
   def create
    
     @promocion = Promocion.new(promocion_params)
     @promocion.usuario_id = current_usuario.id
+    #@promocion.formapago_id = 3 #Para que a todas las promos las cargue con pago GRATUITO.
+    @promocion.estado = "gratuito"
     if !params[:formapago_id].present?
-      @promocion.formapago_id = Formapago::SIN_DEFINIR
+      @promocion.formapago_id = Formapago::GRATUITO
     end
 
     if @promocion.save
-      #@promociones = current_usuario.promociones
+      @promociones = current_usuario.promociones
       render json: @promocion, status: :created
     else
       puts @promocion.errors.full_messages
@@ -49,6 +67,7 @@ class Api::PromocionesController < ApplicationController
     end
   end
 
+  
   # PATCH/PUT /promociones/1
   def update
     if @promocion.update(promocion_params)

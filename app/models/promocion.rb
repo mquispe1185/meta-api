@@ -4,6 +4,8 @@ class Promocion < ApplicationRecord
   belongs_to :formapago
   before_create :gen_code
   has_one_attached :imagen, dependent: :destroy
+  # ESTADOS DE PROMOCION
+  enum estado: %i[pendiente aprobado gratuito]
 
   #estado: 
   #0:default/pendiente, 
