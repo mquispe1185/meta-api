@@ -14,7 +14,7 @@ class Comercioplan < ApplicationRecord
    before_create :gen_code, :set_duracion
    scope :activos, -> { where(activo: true) }
    scope :inactivos, -> { where(activo: false) }
-   scope :vigente, -> { where(estado: :aprobado).last}
+   scope :vigente, -> { where(estado: :aprobado)}
    
   private
   def gen_code

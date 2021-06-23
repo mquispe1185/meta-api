@@ -13,6 +13,6 @@ class MisComerciosSerializer < ActiveModel::Serializer
   has_many :horarios 
 
   attribute :plan_hasta do 
-  	object.comercioplanes.vigente.hasta
+  	object.comercioplanes.vigente.last&.hasta
   end
 end
