@@ -8,7 +8,7 @@ class Api::ComerciosController < ApplicationController
   end
 
   def index_inicio
-    @comercios = Comercio.where(activo: true, habilitado: true).order(:nombre).limit(9)
+    @comercios = Comercio.where(activo: true, habilitado: true).order(:created_at).limit(9)
     render json: @comercios, each_serializer: ComercioShortSerializer
   end
 
