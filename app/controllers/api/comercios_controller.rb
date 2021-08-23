@@ -41,7 +41,7 @@ class Api::ComerciosController < ApplicationController
     @comercio.foto.purge
     @comercio.foto.attach(params[:foto])
     if @comercio.foto.attached?
-        @comercio.update(url_foto: "https://s3.us-east-2.amazonaws.com/meta.app/#{@comercio.foto.key}")
+      @comercio.update(url_foto: "https://s3.us-east-2.amazonaws.com/meta.app/#{@comercio.foto.key}")
     end
     @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercios

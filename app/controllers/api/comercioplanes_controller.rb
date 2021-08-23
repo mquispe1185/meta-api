@@ -19,35 +19,6 @@ class Api::ComercioplanesController < ApplicationController
 
   # POST /comercioplanes
   def create
-    # SDK de Mercado Pago
-    # require 'mercadopago'
-    # Agrega credenciales
-    # sdk = Mercadopago::SDK.new('APP_USR-2484239835628727-052600-82909dea192293e8f3598e6660d3a6e8-765237875')
-    # Crea un objeto de preferencia
-    # preference_data = {
-    # items: [
-    #   {
-    #   title: 'Plan Nuevo',
-    #   unit_price: 75,
-    #   quantity: 1
-    #   }
-    # ],
-    # back_urls: {
-    #   success: 'http://localhost:4200/comerciopanel',
-    #   failure: 'http://localhost:4200/comerciopanel',
-    #   pending: 'http://localhost:4200/comerciopanel'
-    # },
-    # }
-    # preference_response = sdk.preference.create(preference_data)
-    # preference = preference_response[:response]
-
-    # Este valor reemplazará el string "<%= @preference_id %>" en tu HTML
-    # @preference_id = preference['id']
-    # render json: {preference_id: @preference_id}
-    # puts "----------------------------"
-    # puts @preference_id
-
-
     @comercioplan = current_usuario.comercioplanes.new(comercioplan_params)
     comercio = @comercioplan.comercio
     @comercioplan.servicio_anterior_id = comercio.tipo_servicio_id
@@ -57,6 +28,53 @@ class Api::ComercioplanesController < ApplicationController
     else
       render json: @comercioplan.errors.full_messages, status: :unprocessable_entity
     end
+  end
+
+  def solicitud_mp
+    # SDK de Mercado Pago
+    require 'mercadopago'
+    # Agrega credenciales
+    sdk = Mercadopago::SDK.new('APP_USR-2484239835628727-052600-82909dea192293e8f3598e6660d3a6e8-765237875')
+    # Crea un objeto de preferencia
+    preference_data = {
+    items: [
+      {
+      title: params[:tipo_servicio][:nombre],
+      description: 'NUEVA DESCRIPCION',
+      unit_price: params[:tipo_servicio][:importe].to_i,
+      quantity: params[:meses],
+      id:params[:comercio_id],
+      category_id: params[:tipo_servicio][:id],
+      }
+    ],
+    back_urls: {
+      #success: 'http://localhost:3000/api/mensaje_mp',
+      success: 'http://localhost:4200/comerciopanel',
+      #success: 'https://www.metacerca.com.ar/comerciopanel',
+      failure: 'http://localhost:4200/comerciopanel',
+      pending: 'http://localhost:4200/comerciopanel'
+    },
+    # auto_return: 'approved'
+    }
+    #Respuesta del servidor mercado pago
+    preference_response = sdk.preference.create(preference_data)
+    puts "DATOS DE PREFERENCE RESPONSE:::::"
+    puts preference_response
+    preference = preference_response[:response]
+    
+    # Este valor reemplazará el string "<%= @preference_id %>" en tu HTML
+    @preference_id = preference['id']
+    render json: {preference_id: @preference_id}
+    puts "----------------------------"
+    puts @preference_id
+  end
+  
+  def mensaje_mp
+    hacer solicitud a la api de MP con el param payment id
+    en la solicitud recibiremos category?id(plan), id(comercioplan)
+    y con esos datos procedemos a crear el comercio plan
+    puts "ACCION MERCADO PAGO EXITOSA!!!"
+    
   end
 
   # PATCH/PUT /comercioplanes/1
@@ -92,6 +110,7 @@ class Api::ComercioplanesController < ApplicationController
     @comercioplan.destroy
   end
 
+  # utilizado por el admin para actualizar el COMERCIOPLAN de un comercio.
   def admin_update
     if @comercioplan.update(comercioplan_params)
       render json: @comercioplan
