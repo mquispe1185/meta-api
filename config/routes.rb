@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     get '/updatestatuspromo', to: 'promociones#actualizacion_diaria'
     post '/send_consulta', to: 'comercios#enviar_consulta'
     post '/comercioplanes/solicitud_mp', to: 'comercioplanes#solicitud_mp'
-    get '/mensaje_mp', to: 'comercioplanes#mensaje_mp'
+    get '/alta_plan_mp', to: 'comercioplanes#alta_plan_mp'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   end

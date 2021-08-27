@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_03_011319) do
+ActiveRecord::Schema.define(version: 2021_08_27_023252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 2021_06_03_011319) do
     t.boolean "pagado", default: false
     t.string "codigo"
     t.boolean "activo", default: true
+    t.integer "payment_id", default: 0
     t.index ["comercio_id"], name: "index_comercioplanes_on_comercio_id"
     t.index ["formapago_id"], name: "index_comercioplanes_on_formapago_id"
     t.index ["servicio_anterior_id"], name: "index_comercioplanes_on_servicio_anterior_id"

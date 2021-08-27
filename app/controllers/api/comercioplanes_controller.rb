@@ -58,38 +58,54 @@ class Api::ComercioplanesController < ApplicationController
     }
     #Respuesta del servidor mercado pago
     preference_response = sdk.preference.create(preference_data)
-    puts "DATOS DE PREFERENCE RESPONSE:::::"
-    puts preference_response
     preference = preference_response[:response]
     
     # Este valor reemplazará el string "<%= @preference_id %>" en tu HTML
     @preference_id = preference['id']
     render json: {preference_id: @preference_id}
-    puts "----------------------------"
-    puts @preference_id
   end
   
-  def mensaje_mp
-    hacer solicitud a la api de MP con el param payment id
-    en la solicitud recibiremos category?id(plan), id(comercioplan)
-    y con esos datos procedemos a crear el comercio plan
-    puts "ACCION MERCADO PAGO EXITOSA!!!"
+  def alta_plan_mp
+    require 'net/http'
+    require 'uri'
     
+    uri = URI("https://api.mercadopago.com/v1/payments/#{params[:payment_id]}")
+    req = Net::HTTP::Get.new(uri)
+    req['Authorization']= 'Bearer APP_USR-2484239835628727-052600-82909dea192293e8f3598e6660d3a6e8-765237875'
+    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) {|http|
+      http.request(req)
+    }
+    data = JSON.parse(res.body)
+    comercio = Comercio.find(data['additional_info']['items'][0]['id'])
+    tipo_servicio_id = (data['additional_info']['items'][0]['category_id'])
+    importe = (data['transaction_details']['total_paid_amount'])
+    meses = (data['additional_info']['items'][0]['quantity'])
+
+    comercioplan = Comercioplan.new(comercio_id: comercio.id, tipo_servicio_id: tipo_servicio_id,
+                  formapago_id: 4, importe: importe, usuario_id:comercio.usuario_id,
+                  servicio_anterior_id: comercio.tipo_servicio_id, meses: meses, payment_id: params[:payment_id])
+
+
+    if comercioplan.save
+      comercio.update(estado: :cambio_pendiente)
+      render json: { status: :created }
+    else
+      render json: comercioplan.errors.full_messages, status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /comercioplanes/1
+  #Es solo utilizado por admin para cambiar el estado de COMERCIOPLAN solicitado.
   def update
     if @comercioplan.update(comercioplan_params)
      
       comercio = @comercioplan.comercio
       case @comercioplan.read_attribute_before_type_cast(:estado)
       when Comercioplan::PENDIENTE 
-        puts 'op pend'
         # comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.servicio_anterior_id)
         comercio.update(estado: :cambio_pendiente, tipo_servicio_id: @comercioplan.servicio_anterior_id)
         @comercioplan.update(desde: nil, hasta: nil)
       when Comercioplan::APROBADO
-        puts 'op aprobado'
         # comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.tipo_servicio_id)
         comercio.update(estado: :default, tipo_servicio_id: @comercioplan.tipo_servicio_id)
         @comercioplan.update(estado: :aprobado,desde: Date.today, hasta: Date.today + @comercioplan.meses.months)
