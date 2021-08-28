@@ -15,4 +15,10 @@ class MisComerciosSerializer < ActiveModel::Serializer
   attribute :plan_hasta do 
   	object.comercioplanes.vigente.last&.hasta
   end
+
+  attribute :plan_pendiente do 
+    if object.estado == 'cambio_pendiente'
+      object.comercioplanes.last&.tipo_servicio&.nombre
+    end
+  end
 end

@@ -76,7 +76,9 @@ class Api::ComercioplanesController < ApplicationController
       http.request(req)
     }
     data = JSON.parse(res.body)
-    comercio = Comercio.find(data['additional_info']['items'][0]['id'])
+
+    # Cargar los valores que necesitamos para Crear el ComercioPlan del Comercio.
+    comercio = Comercio.find(data['additional_info']['items'][0]['id'].to_i)
     tipo_servicio_id = (data['additional_info']['items'][0]['category_id'])
     importe = (data['transaction_details']['total_paid_amount'])
     meses = (data['additional_info']['items'][0]['quantity'])
