@@ -34,7 +34,7 @@ class Api::ComercioplanesController < ApplicationController
     # SDK de Mercado Pago
     require 'mercadopago'
     # Agrega credenciales
-    sdk = Mercadopago::SDK.new('APP_USR-2484239835628727-052600-82909dea192293e8f3598e6660d3a6e8-765237875')
+    sdk = Mercadopago::SDK.new(Rails.application.credentials.mp_key_prod)
     # Crea un objeto de preferencia
     preference_data = {
     items: [
@@ -49,10 +49,10 @@ class Api::ComercioplanesController < ApplicationController
     ],
     back_urls: {
       #success: 'http://localhost:3000/api/mensaje_mp',
-      success: 'http://localhost:4200/comerciopanel',
-      #success: 'https://www.metacerca.com.ar/comerciopanel',
-      failure: 'http://localhost:4200/comerciopanel',
-      pending: 'http://localhost:4200/comerciopanel'
+      #success: 'http://localhost:4200/comerciopanel',
+      success: 'https://www.metacerca.com.ar/comerciopanel',
+      failure: 'https://www.metacerca.com.ar/comerciopanel',
+      pending: 'https://www.metacerca.com.ar/comerciopanel'
     },
     # auto_return: 'approved'
     }
@@ -71,7 +71,7 @@ class Api::ComercioplanesController < ApplicationController
     
     uri = URI("https://api.mercadopago.com/v1/payments/#{params[:payment_id]}")
     req = Net::HTTP::Get.new(uri)
-    req['Authorization']= 'Bearer APP_USR-2484239835628727-052600-82909dea192293e8f3598e6660d3a6e8-765237875'
+    req['Authorization']= "Bearer #{Rails.application.credentials.mp_key_prod}"
     res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) {|http|
       http.request(req)
     }

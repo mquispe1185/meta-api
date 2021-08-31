@@ -14,11 +14,10 @@ class Usuario < ActiveRecord::Base
   belongs_to :localidad, optional: true
   has_many :promociones
   has_many :comercioplanes
+  has_many :comercios, dependent: :destroy
   after_create :rol
 
-    def rol
-       self.update(rol_id: 3)
-    end
-
-    has_many :comercios, dependent: :destroy
+  def rol
+    self.update(rol_id: 3)
+  end
 end

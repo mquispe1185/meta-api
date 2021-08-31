@@ -58,7 +58,6 @@ class Api::ComerciosController < ApplicationController
      #@comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercio
     else
-      puts @comercio.errors.full_messages
       render json: @comercio.errors, status: :unprocessable_entity
     end
   end

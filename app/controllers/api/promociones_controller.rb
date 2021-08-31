@@ -30,24 +30,6 @@ class Api::PromocionesController < ApplicationController
     render json: @promocion
   end
 
-  # POST /promociones
-  # def create
-   
-  #   @promocion = Promocion.new(promocion_params)
-  #   @promocion.usuario_id = current_usuario.id
-  #   if !params[:formapago_id].present?
-  #     @promocion.formapago_id = Formapago::SIN_DEFINIR
-  #   end
-
-  #   if @promocion.save
-  #     #@promociones = current_usuario.promociones
-  #     render json: @promocion, status: :created
-  #   else
-  #     puts @promocion.errors.full_messages
-  #     render json: @promocion.errors, status: :unprocessable_entity
-  #   end
-  # end
-
   def create
    
     @promocion = Promocion.new(promocion_params)
@@ -62,7 +44,6 @@ class Api::PromocionesController < ApplicationController
       @promociones = current_usuario.promociones
       render json: @promocion, status: :created
     else
-      puts @promocion.errors.full_messages
       render json: @promocion.errors, status: :unprocessable_entity
     end
   end
@@ -96,11 +77,9 @@ class Api::PromocionesController < ApplicationController
     @promocion.imagen.attach(params[:imagen])
     if @promocion.imagen.attached?
         @promocion.update(url: "https://s3.us-east-2.amazonaws.com/meta.app/#{@promocion.imagen.key}")
-   
     end
   
     render json: @promocion
-    #render json: {url_logo: "https://s3.sa-east-1.amazonaws.com/api.eira/#{@institucion.avatar.key}"}
   end
 
   def actualizacion_diaria

@@ -43,4 +43,32 @@ class Comercio < ApplicationRecord
                         estado: :pendiente, desde: Time.now, hasta: 30.days.from_now,
                         importe: 0, usuario: usuario, meses: 1, pagado: true)
   end
+
+  def direccion_string
+    "#{domicilio} - #{localidad.nombre} - #{provincia.nombre}"
+  end
+
+  def es_gratuito
+    tipo_servicio_id == 1 ? true : false
+  end
+
+  def es_basico
+    tipo_servicio_id == 2 ? true : false
+  end
+
+  def es_estandar
+    tipo_servicio_id == 3 ? true : false
+  end
+
+  def es_premium
+    tipo_servicio_id == 4 ? true : false
+  end
+
+  def active_links
+    es_estandar || es_premium
+  end
+
+  def show_referencias
+    es_basico || es_estandar || es_premium
+  end
 end
