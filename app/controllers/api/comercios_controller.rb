@@ -45,7 +45,6 @@ class Api::ComerciosController < ApplicationController
     end
     @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercios
-    #render json: {url_logo: "https://s3.sa-east-1.amazonaws.com/api.eira/#{@institucion.avatar.key}"}
   end
 
 

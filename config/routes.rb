@@ -36,7 +36,7 @@ Rails.application.routes.draw do
     post '/send_consulta', to: 'comercios#enviar_consulta'
     post '/comercioplanes/solicitud_mp', to: 'comercioplanes#solicitud_mp'
     get '/alta_plan_mp', to: 'comercioplanes#alta_plan_mp'
-
+    get '/review_planes', to: 'comercioplanes#review_planes'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   end
   mount_devise_token_auth_for 'Usuario', at: 'auth', controllers: {
