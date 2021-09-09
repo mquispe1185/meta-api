@@ -19,7 +19,7 @@ class Api::ReferenciasController < ApplicationController
     @referencia.usuario_id = current_usuario.id
     
     if @referencia.save
-      render json: @referencia, status: :created, location: @referencia
+      render json: @referencia, status: :created
     else
       render json: @referencia.errors, status: :unprocessable_entity
     end

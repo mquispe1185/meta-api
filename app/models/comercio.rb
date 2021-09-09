@@ -52,7 +52,7 @@ class Comercio < ApplicationRecord
     tipo_servicio_id == 1 ? true : false
   end
 
-  def es_basico
+  def es_economico
     tipo_servicio_id == 2 ? true : false
   end
 
@@ -68,7 +68,11 @@ class Comercio < ApplicationRecord
     es_estandar || es_premium
   end
 
-  def show_referencias
-    es_basico || es_estandar || es_premium
+  def show_economico
+    es_economico || es_estandar || es_premium
+  end
+
+  def show_estandar
+    es_estandar || es_premium
   end
 end

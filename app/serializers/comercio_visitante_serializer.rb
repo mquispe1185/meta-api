@@ -3,7 +3,7 @@
 class ComercioVisitanteSerializer < ActiveModel::Serializer
   attributes :id, :nombre, :telefono, :celular, :web, :facebook, 
   :instagram, :url_foto, :facebook_id, :latitud, :longitud, :email, :descripcion, 
-  :entrega, :envio, :direccion_string, :active_links, :show_referencias
+  :entrega, :envio, :direccion_string, :active_links, :show_economico, :show_estandar
 
   attribute :descripcion, if: :no_es_gratuito? 
   attribute :url_foto, if: :no_es_gratuito? 
@@ -12,7 +12,7 @@ class ComercioVisitanteSerializer < ActiveModel::Serializer
   has_many :horarios
 
   def no_es_gratuito?
-    object.es_basico || object.es_estandar || object.es_premium
+    object.es_economico || object.es_estandar || object.es_premium
   end
 
   attribute :rubro_string do 
