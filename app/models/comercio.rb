@@ -8,7 +8,7 @@ class Comercio < ApplicationRecord
   has_many :horarios, -> { order(:dia, :desde) }, dependent: :destroy
   has_many :promociones
   has_many :comercioplanes, dependent: :destroy
-  has_one_attached :foto, dependent: :destroy
+  has_many_attached :fotos, dependent: :destroy
 
   before_create :servicio
   after_create :set_comercioplan

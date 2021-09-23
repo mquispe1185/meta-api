@@ -21,4 +21,9 @@ class MisComerciosSerializer < ActiveModel::Serializer
       object.comercioplanes.last&.tipo_servicio&.nombre
     end
   end
+
+  attribute :fotos do
+    #object.fotos.map(&:service_url)
+    object.fotos.attachments.map{|f| [f.id, f.service_url]}
+  end
 end

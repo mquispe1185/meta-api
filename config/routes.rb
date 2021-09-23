@@ -8,7 +8,9 @@ Rails.application.routes.draw do
     resources :promociones
     resources :horarios
     resources :rubros
-    resources :comercios
+    resources :comercios do
+      delete :delete_foto, on: :member
+    end
     resources :referencias
     resources :localidades
     resources :departamentos
@@ -21,7 +23,7 @@ Rails.application.routes.draw do
     put '/habilitar_promo', to: 'promociones#habilitar'
     put '/add_visita', to: 'comercios#add_visita'
     put '/add_visita_links', to: 'comercios#add_visita_links'
-    put '/set_foto', to: 'comercios#set_foto'
+    put '/set_fotos', to: 'comercios#set_fotos'
     put '/set_foto_promo', to: 'promociones#set_foto'
     get '/miscomercios', to: 'comercios#mis_comercios'
     get '/listacomercios', to: 'comercios#index_inicio'

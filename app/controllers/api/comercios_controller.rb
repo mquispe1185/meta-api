@@ -1,5 +1,5 @@
 class Api::ComerciosController < ApplicationController
-  before_action :set_comercio, only: [:show, :update, :destroy,:set_foto]
+  before_action :set_comercio, only: [:show, :update, :destroy,:set_fotos, :delete_foto]
   before_action :authenticate_usuario!, only:[:create,:set_foto,:mis_comercios]
   # GET /comercios
   def index
@@ -37,14 +37,12 @@ class Api::ComerciosController < ApplicationController
     render json: @comercio, serializer: ComercioVisitanteSerializer
   end
 
-  def set_foto
-    @comercio.foto.purge
-    @comercio.foto.attach(params[:foto])
-    if @comercio.foto.attached?
-      @comercio.update(url_foto: "https://s3.us-east-2.amazonaws.com/meta.app/#{@comercio.foto.key}")
-    end
-    @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
-    render json: @comercios
+  def set_fotos
+    @comercio.fotos.attach(params[:fotos])
+    # if @comercio.fotos.attached?
+    #   @comercio.update(url_foto: "https://s3.us-east-2.amazonaws.com/meta.app/#{@comercio.foto.key}")
+    # end
+    render json: @comercio, serializer: MisComerciosSerializer
   end
 
 
@@ -133,6 +131,16 @@ class Api::ComerciosController < ApplicationController
     @comercio.update(activo: false)
     @comercio.promociones.update(activo: false)
     @comercio.comercioplanes.update(activo: false)
+  end
+
+  def delete_foto
+    foto = ActiveStorage::Attachment.find(params[:foto_id])
+    if foto
+      foto.purge
+      render json: @comercio, serializer: MisComerciosSerializer
+    else
+      render json: @comercio.errors, status: :unprocessable_entity
+    end
   end
 
   private
