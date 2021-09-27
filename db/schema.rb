@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_27_023252) do
+ActiveRecord::Schema.define(version: 2021_09_27_005038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2021_08_27_023252) do
     t.integer "visitas_ig", default: 0
     t.integer "visitas_web", default: 0
     t.integer "visitas_wsp", default: 0
+    t.string "url_video"
     t.index ["departamento_id"], name: "index_comercios_on_departamento_id"
     t.index ["localidad_id"], name: "index_comercios_on_localidad_id"
     t.index ["provincia_id"], name: "index_comercios_on_provincia_id"

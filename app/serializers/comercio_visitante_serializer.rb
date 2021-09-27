@@ -18,4 +18,8 @@ class ComercioVisitanteSerializer < ActiveModel::Serializer
   attribute :rubro_string do 
   	object.rubro.descripcion 
   end
+
+  attribute :fotos do
+    object.fotos.map(&:service_url)
+  end
 end

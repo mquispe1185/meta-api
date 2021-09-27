@@ -39,9 +39,7 @@ class Api::ComerciosController < ApplicationController
 
   def set_fotos
     @comercio.fotos.attach(params[:fotos])
-    # if @comercio.fotos.attached?
-    #   @comercio.update(url_foto: "https://s3.us-east-2.amazonaws.com/meta.app/#{@comercio.foto.key}")
-    # end
+    @comercio.update(url_foto: @comercio.fotos.first.service_url)
     render json: @comercio, serializer: MisComerciosSerializer
   end
 
