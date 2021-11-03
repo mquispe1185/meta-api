@@ -34,7 +34,7 @@ class Api::ComercioplanesController < ApplicationController
     # SDK de Mercado Pago
     require 'mercadopago'
     # Agrega credenciales
-    sdk = Mercadopago::SDK.new(Rails.application.credentials.mp_key_prod)
+    sdk = Mercadopago::SDK.new(Rails.application.credentials.mp_key_dev)
     # Crea un objeto de preferencia
     preference_data = {
     items: [
@@ -48,11 +48,12 @@ class Api::ComercioplanesController < ApplicationController
       }
     ],
     back_urls: {
-      #success: 'http://localhost:3000/api/mensaje_mp',
-      #success: 'http://localhost:4200/comerciopanel',
-      success: 'https://www.metacerca.com.ar/comerciopanel',
+      success: 'http://localhost:4200/comerciopanel',
+      pending: 'http://localhost:4200/comerciopanel',
+
+      #success: 'https://www.metacerca.com.ar/comerciopanel',
       failure: 'https://www.metacerca.com.ar/comerciopanel',
-      pending: 'https://www.metacerca.com.ar/comerciopanel'
+      #pending: 'https://www.metacerca.com.ar/comerciopanel'
     },
     # auto_return: 'approved'
     }
@@ -71,7 +72,7 @@ class Api::ComercioplanesController < ApplicationController
     
     uri = URI("https://api.mercadopago.com/v1/payments/#{params[:payment_id]}")
     req = Net::HTTP::Get.new(uri)
-    req['Authorization']= "Bearer #{Rails.application.credentials.mp_key_prod}"
+    req['Authorization']= "Bearer #{Rails.application.credentials.mp_key_dev}"
     res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) {|http|
       http.request(req)
     }
@@ -110,11 +111,15 @@ class Api::ComercioplanesController < ApplicationController
       when Comercioplan::APROBADO
         # comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.tipo_servicio_id)
         comercio.update(estado: :default, tipo_servicio_id: @comercioplan.tipo_servicio_id)
-        @comercioplan.update(estado: :aprobado,desde: Date.today, hasta: Date.today + @comercioplan.meses.months)
+        @comercioplan.update(estado: :aprobado, pagado: :true, desde: Date.today, hasta: Date.today + @comercioplan.meses.months)
       when Comercioplan::VENCIDO
-        comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: 1)
+        @comercioplan.update(estado: :vencido)
+        nuevo_cp = ComercioPlan.create(servicio_anterior_id: @comercioplan.tipo_servicio_id, tipo_servicio_id: TipoServicio::GRATUITO, 
+                        desde: Date.today, hasta: Date.today + 1.months, pagado: true, formapago_id: Formapago::GRATUITO)
+        comercio.update(estado: :default, tipo_servicio_id: nuevo_cp.tipo_servicio_id)
+
       when Comercioplan::RECHAZADO
-        comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.servicio_anterior_id)
+        comercio.update(estado: :default,tipo_servicio_id: @comercioplan.servicio_anterior_id)
         @comercioplan.update(desde: nil, hasta: nil)
       end
       render json: @comercioplan
@@ -138,7 +143,17 @@ class Api::ComercioplanesController < ApplicationController
   end
 
   def review_planes
-    puts "HOLAAAAAAAAAAAAAAAAAAAAAAAAA"
+    comercioplanes = comercioplanes.where (hasta: <= Date.Yesterday)
+
+    @comercioplanes===.each do |cp|
+      @comercioplan.update(estado: :vencido)
+      nuevo_cp = ComercioPlan.create(servicio_anterior_id: @comercioplan.tipo_servicio_id, tipo_servicio_id: TipoServicio::GRATUITO, 
+                                    desde: Date.today, hasta: Date.today + 1.months, pagado: true, formapago_id: Formapago::GRATUITO)
+      comercio.update(estado: :default, tipo_servicio_id: nuevo_cp.tipo_servicio_id)
+    end
+    
+    
+
   end
   private
     # Use callbacks to share common setup or constraints between actions.
