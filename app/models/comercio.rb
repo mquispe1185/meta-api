@@ -75,4 +75,8 @@ class Comercio < ApplicationRecord
   def show_estandar
     es_estandar || es_premium
   end
+
+  def no_plan_vigente?
+    !comercioplanes.any?{|cp| cp.hasta > Date.today}
+  end
 end

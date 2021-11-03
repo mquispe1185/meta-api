@@ -143,12 +143,19 @@ class Api::ComercioplanesController < ApplicationController
   end
 
   def review_planes
-    comercioplanes = ComercioPlan.where('hasta <= ?', Date.yesteday)
-    @comercioplanes.each do |cp|
-      @comercioplan.update(estado: :vencido)
-      nuevo_cp = ComercioPlan.create(servicio_anterior_id: @comercioplan.tipo_servicio_id, tipo_servicio_id: TipoServicio::GRATUITO, 
-                                    desde: Date.today, hasta: Date.today + 1.months, pagado: true, formapago_id: Formapago::GRATUITO)
-      comercio.update(estado: :default, tipo_servicio_id: nuevo_cp.tipo_servicio_id)
+    comercioplanes = Comercioplan.where('hasta <= ?', Date.yesterday)
+    comercioplanes.each do |cp|
+      if cp.comercio.no_plan_vigente?
+        nuevo_cp = Comercioplan.new(servicio_anterior_id: cp.tipo_servicio_id, tipo_servicio_id: TipoServicio::GRATUITO, 
+                                    desde: Date.today, hasta: (Date.today + 1.months), pagado: true, formapago_id: Formapago::GRATUITO,
+                                    usuario: cp.usuario, comercio: cp.comercio)
+        if nuevo_cp.save
+          cp.update(estado: :vencido)
+          cp.comercio.update(estado: :default, tipo_servicio_id: nuevo_cp.tipo_servicio_id)
+        else
+          puts nuevo_cp.errors.full_messages, status: :unprocessable_entity
+        end
+      end
     end    
   end
 
