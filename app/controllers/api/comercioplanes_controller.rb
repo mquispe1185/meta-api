@@ -143,7 +143,7 @@ class Api::ComercioplanesController < ApplicationController
   end
 
   def review_planes
-    comercioplanes = comercioplanes.where (hasta: <= Date.Yesterday)
+    comercioplanes = ComercioPlan.where('hasta <= ?', Date.yesteday)
 
     @comercioplanes===.each do |cp|
       @comercioplan.update(estado: :vencido)
