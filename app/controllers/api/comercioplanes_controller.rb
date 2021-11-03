@@ -144,17 +144,14 @@ class Api::ComercioplanesController < ApplicationController
 
   def review_planes
     comercioplanes = ComercioPlan.where('hasta <= ?', Date.yesteday)
-
-    @comercioplanes===.each do |cp|
+    @comercioplanes.each do |cp|
       @comercioplan.update(estado: :vencido)
       nuevo_cp = ComercioPlan.create(servicio_anterior_id: @comercioplan.tipo_servicio_id, tipo_servicio_id: TipoServicio::GRATUITO, 
                                     desde: Date.today, hasta: Date.today + 1.months, pagado: true, formapago_id: Formapago::GRATUITO)
       comercio.update(estado: :default, tipo_servicio_id: nuevo_cp.tipo_servicio_id)
-    end
-    
-    
-
+    end    
   end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_comercioplan
