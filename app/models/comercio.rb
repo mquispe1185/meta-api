@@ -34,12 +34,12 @@ class Comercio < ApplicationRecord
     end
   end
   
-  def servicio
+  def serviciocd
     self.tipo_servicio_id = TipoServicio::ESTANDAR
   end
 
   def set_comercioplan
-    Comercioplan.create(comercio: self, tipo_servicio: tipo_servicio, formapago: Formapago.first,
+    Comercioplan.create(comercio: self, tipo_servicio: tipo_servicio, formapago: Formapago::GRATUITO,
                         estado: :pendiente, desde: Time.now, hasta: 30.days.from_now,
                         importe: 0, usuario: usuario, meses: 1, pagado: true)
   end
