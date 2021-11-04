@@ -34,7 +34,7 @@ class Comercio < ApplicationRecord
     end
   end
   
-  def serviciocd
+  def servicio
     self.tipo_servicio_id = TipoServicio::ESTANDAR
   end
 
