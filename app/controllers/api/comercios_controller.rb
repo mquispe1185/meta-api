@@ -46,14 +46,13 @@ class Api::ComerciosController < ApplicationController
 
   # POST /comercios
   def create
-    @comercio = Comercio.new(comercio_params)
-    @comercio.usuario_id = current_usuario.id
-    @comercio.tipo_servicio_id = 1
+    @comercio = current_usuario.comercios.new(comercio_params)
+    @comercio.tipo_servicio_id = TipoServicio::ESTANDAR
     if @comercio.save
      #@comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercio
     else
-      render json: @comercio.errors, status: :unprocessable_entity
+      render json: @comercio.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -137,7 +136,7 @@ class Api::ComerciosController < ApplicationController
       foto.purge
       render json: @comercio, serializer: MisComerciosSerializer
     else
-      render json: @comercio.errors, status: :unprocessable_entity
+      render json: @comercio.errors.full_messages, status: :unprocessable_entity
     end
   end
 

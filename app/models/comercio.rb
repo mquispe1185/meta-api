@@ -10,7 +10,6 @@ class Comercio < ApplicationRecord
   has_many :comercioplanes, dependent: :destroy
   has_many_attached :fotos, dependent: :destroy
 
-  before_create :servicio
   after_create :set_comercioplan
   # ESTADOS DE PLAN ACTUAL DE COMERCIO
   enum estado: %i[default cambio_pendiente]
@@ -33,13 +32,9 @@ class Comercio < ApplicationRecord
       all
     end
   end
-  
-  def servicio
-    self.tipo_servicio_id = TipoServicio::ESTANDAR
-  end
 
   def set_comercioplan
-    Comercioplan.create(comercio: self, tipo_servicio: tipo_servicio, formapago: Formapago::GRATUITO,
+    Comercioplan.create(comercio: self, tipo_servicio: tipo_servicio, formapago_id: Formapago::GRATUITO,
                         estado: :aprobado, desde: Time.now, hasta: 30.days.from_now,
                         importe: 0, usuario: usuario, meses: 1, pagado: true)
   end
