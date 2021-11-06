@@ -39,7 +39,7 @@ class Api::ComerciosController < ApplicationController
 
   def set_fotos
     @comercio.fotos.attach(params[:fotos])
-    @comercio.update(url_foto: @comercio.fotos.first.service_url)
+    @comercio.update(url_foto: "#{ENV['BASE_URL_IMG']}#{@comercio.fotos.first.key}")
     render json: @comercio, serializer: MisComerciosSerializer
   end
 

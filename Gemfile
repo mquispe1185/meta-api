@@ -21,6 +21,7 @@ gem 'puma', '~> 4.3'
 gem 'rack-cors'
 gem "active_model_serializers"
 gem 'devise_token_auth'
+gem "figaro"
 gem 'omniauth-google-oauth2'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
