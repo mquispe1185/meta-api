@@ -100,18 +100,26 @@ class Api::ComercioplanesController < ApplicationController
   # PATCH/PUT /comercioplanes/1
   #Es solo utilizado por admin para cambiar el estado de COMERCIOPLAN solicitado.
   def update
+    comercio = @comercioplan.comercio
+    anterior_cp = comercio.comercioplanes.vigente.last
+    puts "anterior_cp #{anterior_cp.id}"
     if @comercioplan.update(comercioplan_params)
      
-      comercio = @comercioplan.comercio
       case @comercioplan.read_attribute_before_type_cast(:estado)
       when Comercioplan::PENDIENTE 
-        # comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.servicio_anterior_id)
         comercio.update(estado: :cambio_pendiente, tipo_servicio_id: @comercioplan.servicio_anterior_id)
         @comercioplan.update(desde: nil, hasta: nil)
       when Comercioplan::APROBADO
-        # comercio.update(estado: Comercio::DEFAULT,tipo_servicio_id: @comercioplan.tipo_servicio_id)
+        # Si el Comercio tiene plan GRATUITO Vigente entonces se debe INICIAR el plan DESDE HOY.
+        # Si el Comercio tiene un plan PAGO VIGENTE entonces se debe INICIAR el plan RECIEN CUANDO TERMINE EL ACTUAL.
+
+        if comercio.tipo_servicio_id = TipoServicio::GRATUITO
+          @comercioplan.update(pagado: :true, desde: Date.today, hasta: (Date.today + @comercioplan.meses.months))
+        else 
+          @comercioplan.update(pagado: :true, desde: anterior_cp.hasta , hasta: (anterior_cp.hasta + @comercioplan.meses.month))
+        end
+        anterior_cp.update(estado: :vencido)
         comercio.update(estado: :default, tipo_servicio_id: @comercioplan.tipo_servicio_id)
-        @comercioplan.update(estado: :aprobado, pagado: :true, desde: Date.today, hasta: Date.today + @comercioplan.meses.months)
       when Comercioplan::VENCIDO
         @comercioplan.update(estado: :vencido)
         nuevo_cp = ComercioPlan.create(servicio_anterior_id: @comercioplan.tipo_servicio_id, tipo_servicio_id: TipoServicio::GRATUITO, 
@@ -142,22 +150,22 @@ class Api::ComercioplanesController < ApplicationController
     end
   end
 
-  def review_planes
-    # comercioplanes = Comercioplan.where.not(estado: :rechazado).where('hasta <= ?', Date.yesterday)
-    # comercioplanes.each do |cp|
-    #   if cp.comercio.no_plan_vigente?
-    #     nuevo_cp = Comercioplan.new(servicio_anterior_id: cp.tipo_servicio_id, tipo_servicio_id: TipoServicio::GRATUITO, 
-    #                                 meses: 1, pagado: true, formapago_id: Formapago::GRATUITO, estado: :aprobado,
-    #                                 usuario: cp.usuario, comercio: cp.comercio)
-    #     if nuevo_cp.save
-    #       cp.update(estado: :vencido)
-    #       cp.comercio.update(estado: :default, tipo_servicio_id: nuevo_cp.tipo_servicio_id)
-    #     else
-    #       puts nuevo_cp.errors.full_messages, status: :unprocessable_entity
-    #     end
-    #   end
-    # end    
-  end
+  # def review_planes
+  #   comercioplanes = Comercioplan.where.not(estado: :rechazado).where('hasta <= ?', Date.yesterday)
+  #   comercioplanes.each do |cp|
+  #     if cp.comercio.no_plan_vigente?
+  #       nuevo_cp = Comercioplan.new(servicio_anterior_id: cp.tipo_servicio_id, tipo_servicio_id: TipoServicio::GRATUITO, 
+  #                                   meses: 1, pagado: true, formapago_id: Formapago::GRATUITO, estado: :aprobado,
+  #                                   usuario: cp.usuario, comercio: cp.comercio)
+  #       if nuevo_cp.save
+  #         cp.update(estado: :vencido)
+  #         cp.comercio.update(estado: :default, tipo_servicio_id: nuevo_cp.tipo_servicio_id)
+  #       else
+  #         puts nuevo_cp.errors.full_messages, status: :unprocessable_entity
+  #       end
+  #     end
+  #   end    
+  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.
