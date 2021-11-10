@@ -24,7 +24,7 @@ class Api::ComercioplanesController < ApplicationController
     @comercioplan.servicio_anterior_id = comercio.tipo_servicio_id
     if @comercioplan.save
       comercio.update(estado: :cambio_pendiente)
-      render json: comercio, status: :created, serializer: ComercioSerializer
+      render json: comercio, status: :created, serializer: MisComerciosSerializer
     else
       render json: @comercioplan.errors.full_messages, status: :unprocessable_entity
     end
@@ -130,7 +130,8 @@ class Api::ComercioplanesController < ApplicationController
         comercio.update(estado: :default,tipo_servicio_id: @comercioplan.servicio_anterior_id)
         @comercioplan.update(desde: nil, hasta: nil)
       end
-      render json: @comercioplan
+      comercio_planes = Comercioplan.where(id: [@comercioplan.id, anterior_cp.id])
+      render json: comercio_planes
     else
       render json: @comercioplan.errors, status: :unprocessable_entity
     end

@@ -11,7 +11,8 @@ class Comercioplan < ApplicationRecord
    VENCIDO = 2
    RECHAZADO = 3
 
-   before_create :gen_code, :set_duracion
+   before_create :gen_code
+   before_create :set_duracion, if: :es_gratuito?
    scope :activos, -> { where(activo: true) }
    scope :inactivos, -> { where(activo: false) }
    scope :vigente, -> { where(estado: :aprobado)}
@@ -26,4 +27,7 @@ class Comercioplan < ApplicationRecord
     self.hasta = meses.months.from_now
   end
 
+  def es_gratuito?
+    tipo_servicio_id == TipoServicio::GRATUITO
+  end
 end
