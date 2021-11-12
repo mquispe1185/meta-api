@@ -58,13 +58,15 @@ class Api::ComerciosController < ApplicationController
 
   # PATCH/PUT /comercios/1
   def update
+    if params[:comercio][:url_video].present?
+      params[:comercio][:url_video] = params[:comercio][:url_video].sub('https://youtu.be/', '')
+    end
     if @comercio.update(comercio_params)
       if current_usuario.rol_id == 1
-        @comercios = Comercio.where(activo: true).order(:nombre)
+        render json: @comercio
       else
-      @comercios = current_usuario.comercios.where(activo: true).order(:nombre)
+        render json: @comercio, serializer: MisComerciosSerializer
       end
-      render json: @comercios
     else
       render json: @comercio.errors, status: :unprocessable_entity
     end
@@ -151,6 +153,6 @@ class Api::ComerciosController < ApplicationController
       params.require(:comercio).permit(:nombre, :domicilio, :telefono, :celular, :web,:rubro_id, :tipo_servicio,:visitas,
         :facebook, :instagram, :facebook_id, :latitud, :longitud, :email, :provincia_id, :departamento_id, :localidad_id,:estado,
         :descripcion, :usuario_id, :entrega, :activo,:foto,:tags,:habilitado,:envio,:es_fanpage,
-        :visitas_face,:visitas_ig,:visitas_web)
+        :visitas_face,:visitas_ig,:visitas_web, :url_video)
     end
 end

@@ -3,7 +3,7 @@
 class ComercioVisitanteSerializer < ActiveModel::Serializer
   attributes :id, :nombre, :telefono, :celular, :web, :facebook, 
   :instagram, :url_foto, :facebook_id, :latitud, :longitud, :email, :descripcion, 
-  :entrega, :envio, :direccion_string, :active_links, :show_economico, :show_estandar
+  :entrega, :envio, :direccion_string, :active_links, :show_economico, :show_estandar, :url_video
 
   attribute :descripcion, if: :no_es_gratuito? 
   attribute :url_foto, if: :no_es_gratuito? 
