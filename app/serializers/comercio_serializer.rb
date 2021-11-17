@@ -4,7 +4,7 @@ class ComercioSerializer < ActiveModel::Serializer
   attributes :id, :nombre, :domicilio, :telefono, :celular, :web, :facebook, :instagram, :url_foto,:tags,:habilitado, :estado,
   :facebook_id, :latitud, :longitud, :email, :descripcion, :entrega, :rubro_id, :provincia_id, :departamento_id, :localidad_id,
   :visitas, :visitas_face, :visitas_ig, :visitas_web, :visitas_wsp,
-  :envio,:es_fanpage, :created_at, :url_video
+  :envio,:es_fanpage, :created_at, :es_gratuito, :es_economico, :es_estandar, :es_premium, :url_video
   has_one :provincia
   has_one :departamento
   has_one :localidad
@@ -12,4 +12,7 @@ class ComercioSerializer < ActiveModel::Serializer
   has_one :usuario
   has_one :tipo_servicio
   has_many :horarios
+  attribute :fotos do
+    object.fotos.attachments.map{|f| [f.id, f.service_url]}
+  end
 end
