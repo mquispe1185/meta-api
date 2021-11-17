@@ -102,32 +102,28 @@ class Api::ComercioplanesController < ApplicationController
   def update
     comercio = @comercioplan.comercio
     anterior_cp = comercio.comercioplanes.vigente.last
-    puts "anterior_cp #{anterior_cp.id}"
     if @comercioplan.update(comercioplan_params)
-     
       case @comercioplan.read_attribute_before_type_cast(:estado)
+
       when Comercioplan::PENDIENTE 
         comercio.update(estado: :cambio_pendiente, tipo_servicio_id: @comercioplan.servicio_anterior_id)
         @comercioplan.update(desde: nil, hasta: nil)
+
       when Comercioplan::APROBADO
         # Si el Comercio tiene plan GRATUITO Vigente entonces se debe INICIAR el plan DESDE HOY.
         # Si el Comercio tiene un plan PAGO VIGENTE entonces se debe INICIAR el plan RECIEN CUANDO TERMINE EL ACTUAL.
-
-        if comercio.tipo_servicio_id = TipoServicio::GRATUITO
+        if comercio.tipo_servicio_id == TipoServicio::GRATUITO ||
+          (comercio.tipo_servicio_id == TipoServicio::ESTANDAR && anterior_cp.formapago_id == Formapago::GRATUITO)
           @comercioplan.update(pagado: :true, desde: Date.today, hasta: (Date.today + @comercioplan.meses.months))
+          anterior_cp.update(estado: :vencido)
+          comercio.update(estado: :default, tipo_servicio_id: @comercioplan.tipo_servicio_id)
         else 
           @comercioplan.update(pagado: :true, desde: anterior_cp.hasta , hasta: (anterior_cp.hasta + @comercioplan.meses.month))
-        end
-        anterior_cp.update(estado: :vencido)
-        comercio.update(estado: :default, tipo_servicio_id: @comercioplan.tipo_servicio_id)
-      when Comercioplan::VENCIDO
-        @comercioplan.update(estado: :vencido)
-        nuevo_cp = ComercioPlan.create(servicio_anterior_id: @comercioplan.tipo_servicio_id, tipo_servicio_id: TipoServicio::GRATUITO, 
-                        desde: Date.today, hasta: Date.today + 1.months, pagado: true, formapago_id: Formapago::GRATUITO)
-        comercio.update(estado: :default, tipo_servicio_id: nuevo_cp.tipo_servicio_id)
-
+          comercio.update(estado: :default)
+       end
+       
       when Comercioplan::RECHAZADO
-        comercio.update(estado: :default,tipo_servicio_id: @comercioplan.servicio_anterior_id)
+        comercio.update(estado: :default)
         @comercioplan.update(desde: nil, hasta: nil)
       end
       comercio_planes = Comercioplan.where(id: [@comercioplan.id, anterior_cp.id])
