@@ -47,7 +47,7 @@ class Api::ComerciosController < ApplicationController
   # POST /comercios
   def create
     @comercio = current_usuario.comercios.new(comercio_params)
-    @comercio.tipo_servicio_id = TipoServicio::ESTANDAR
+    @comercio.tipo_servicio_id = TipoServicio::NUEVO
     if @comercio.save
      #@comercios = current_usuario.comercios.where(activo: true).order(:nombre)
     render json: @comercio

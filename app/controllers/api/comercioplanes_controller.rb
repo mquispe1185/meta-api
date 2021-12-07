@@ -112,21 +112,26 @@ class Api::ComercioplanesController < ApplicationController
       when Comercioplan::APROBADO
         # Si el Comercio tiene plan GRATUITO Vigente entonces se debe INICIAR el plan DESDE HOY.
         # Si el Comercio tiene un plan PAGO VIGENTE entonces se debe INICIAR el plan RECIEN CUANDO TERMINE EL ACTUAL.
-        if comercio.tipo_servicio_id == TipoServicio::GRATUITO ||
-          (comercio.tipo_servicio_id == TipoServicio::ESTANDAR && anterior_cp.formapago_id == Formapago::GRATUITO)
+
+        # if comercio.tipo_servicio_id == TipoServicio::GRATUITO ||
+        #   (comercio.tipo_servicio_id == TipoServicio::ESTANDAR && anterior_cp.formapago_id == Formapago::GRATUITO)
+        #   @comercioplan.update(pagado: :true, desde: Date.today, hasta: (Date.today + @comercioplan.meses.months))
+        #   anterior_cp.update(estado: :vencido)
+        #   comercio.update(estado: :default, tipo_servicio_id: @comercioplan.tipo_servicio_id)
+        # else 
+        if anterior_cp&.tipo_servicio_id == TipoServicio::GRATUITO
           @comercioplan.update(pagado: :true, desde: Date.today, hasta: (Date.today + @comercioplan.meses.months))
           anterior_cp.update(estado: :vencido)
-          comercio.update(estado: :default, tipo_servicio_id: @comercioplan.tipo_servicio_id)
         else 
-          @comercioplan.update(pagado: :true, desde: anterior_cp.hasta , hasta: (anterior_cp.hasta + @comercioplan.meses.month))
-          comercio.update(estado: :default)
-       end
+          @comercioplan.update(pagado: :true, desde: (anterior_cp&.hasta || Date.today) , hasta: ((anterior_cp&.hasta || Date.today) + @comercioplan.meses.month))
+        end
+        comercio.update(estado: :default, tipo_servicio_id: @comercioplan.tipo_servicio_id)
        
       when Comercioplan::RECHAZADO
         comercio.update(estado: :default)
         @comercioplan.update(desde: nil, hasta: nil)
       end
-      comercio_planes = Comercioplan.where(id: [@comercioplan.id, anterior_cp.id])
+      comercio_planes = Comercioplan.where(id: [@comercioplan.id, anterior_cp&.id])
       render json: comercio_planes
     else
       render json: @comercioplan.errors, status: :unprocessable_entity

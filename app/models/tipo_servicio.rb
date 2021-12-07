@@ -4,4 +4,5 @@ class TipoServicio < ApplicationRecord
   BASICO = 2
   ESTANDAR = 3
   PREMIUM = 4
+  NUEVO = 9
 end
