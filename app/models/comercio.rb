@@ -75,4 +75,9 @@ class Comercio < ApplicationRecord
   def no_plan_vigente?
     !comercioplanes.any?{|cp| cp.hasta > Date.today}
   end
+
+  def has_plan_vigente?
+    comercioplanes.any?{|cp| cp.hasta > Date.today && cp.aprobado?}
+  end  
+
 end

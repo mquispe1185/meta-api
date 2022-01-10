@@ -1,7 +1,7 @@
 namespace :fix do
     desc 'Fix status comercios plan'
     task status_comercioplan: :environment do
-        comercioplanes = Comercioplan.where('hasta <= ?', Date.today)
+        comercioplanes = Comercioplan.activos.joins(:comercio).where('hasta <= ?', Date.today).where(comercios:{activo: true})
         comercioplanes.each do |cp|
           if cp.comercio.no_plan_vigente?
             nuevo_cp = Comercioplan.new(servicio_anterior_id: cp.tipo_servicio_id, tipo_servicio_id: TipoServicio::GRATUITO, 
