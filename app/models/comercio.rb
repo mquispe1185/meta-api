@@ -6,7 +6,7 @@ class Comercio < ApplicationRecord
   belongs_to :rubro
   belongs_to :tipo_servicio
   has_many :horarios, -> { order(:dia, :desde) }, dependent: :destroy
-  has_many :promociones
+  has_many :promociones, dependent: :destroy
   has_many :comercioplanes, dependent: :destroy
   has_many_attached :fotos, dependent: :destroy
 
