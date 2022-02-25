@@ -18,15 +18,26 @@ class Api::ComercioplanesController < ApplicationController
   end
 
   # POST /comercioplanes
+  # Utilizado en el Paso 2 del Alta de Comercio y Boton Tipo Servicio desde Cliente.
   def create
-    @comercioplan = current_usuario.comercioplanes.new(comercioplan_params)
-    comercio = @comercioplan.comercio
-    @comercioplan.servicio_anterior_id = comercio.tipo_servicio_id
-    if @comercioplan.save
-      comercio.update(estado: :cambio_pendiente)
-      render json: comercio, status: :created, serializer: MisComerciosSerializer
+    comercio = Comercio.find(params[:comercio_id])
+    plan_nuevo = comercio.plan_nuevo
+    plan_nuevo.servicio_anterior_id = comercio.tipo_servicio_id
+    if plan_nuevo
+      if plan_nuevo.update(comercioplan_params)
+        comercio.update(estado: :cambio_pendiente)
+        render json: comercio, status: :created, serializer: MisComerciosSerializer
+      else
+        render json: plan_nuevo.errors.full_messages, status: :unprocessable_entity
+      end
     else
-      render json: @comercioplan.errors.full_messages, status: :unprocessable_entity
+      plan_nuevo = current_usuario.comercioplanes.new(comercioplan_params)
+      if plan_nuevo.save
+        comercio.update(estado: :cambio_pendiente)
+        render json: comercio, status: :created, serializer: MisComerciosSerializer
+      else
+        render json: plan_nuevo.errors.full_messages, status: :unprocessable_entity
+      end
     end
   end
 
@@ -50,10 +61,7 @@ class Api::ComercioplanesController < ApplicationController
     back_urls: {
       success: 'http://localhost:4200/comerciopanel',
       pending: 'http://localhost:4200/comerciopanel',
-
-      #success: 'https://www.metacerca.com.ar/comerciopanel',
       failure: 'https://www.metacerca.com.ar/comerciopanel',
-      #pending: 'https://www.metacerca.com.ar/comerciopanel'
     },
     # auto_return: 'approved'
     }
@@ -88,7 +96,6 @@ class Api::ComercioplanesController < ApplicationController
                   formapago_id: 4, importe: importe, usuario_id:comercio.usuario_id,
                   servicio_anterior_id: comercio.tipo_servicio_id, meses: meses, payment_id: params[:payment_id])
 
-
     if comercioplan.save
       comercio.update(estado: :cambio_pendiente)
       render json: { status: :created }
@@ -105,20 +112,13 @@ class Api::ComercioplanesController < ApplicationController
     if @comercioplan.update(comercioplan_params)
       case @comercioplan.read_attribute_before_type_cast(:estado)
 
-      when Comercioplan::PENDIENTE 
+      when Comercioplan::PENDIENTE
         comercio.update(estado: :cambio_pendiente, tipo_servicio_id: @comercioplan.servicio_anterior_id)
         @comercioplan.update(desde: nil, hasta: nil)
 
       when Comercioplan::APROBADO
         # Si el Comercio tiene plan GRATUITO Vigente entonces se debe INICIAR el plan DESDE HOY.
         # Si el Comercio tiene un plan PAGO VIGENTE entonces se debe INICIAR el plan RECIEN CUANDO TERMINE EL ACTUAL.
-
-        # if comercio.tipo_servicio_id == TipoServicio::GRATUITO ||
-        #   (comercio.tipo_servicio_id == TipoServicio::ESTANDAR && anterior_cp.formapago_id == Formapago::GRATUITO)
-        #   @comercioplan.update(pagado: :true, desde: Date.today, hasta: (Date.today + @comercioplan.meses.months))
-        #   anterior_cp.update(estado: :vencido)
-        #   comercio.update(estado: :default, tipo_servicio_id: @comercioplan.tipo_servicio_id)
-        # else 
         if anterior_cp&.tipo_servicio_id == TipoServicio::GRATUITO
           @comercioplan.update(pagado: :true, desde: Date.today, hasta: (Date.today + @comercioplan.meses.months))
           anterior_cp.update(estado: :vencido)
