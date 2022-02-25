@@ -77,10 +77,14 @@ class Api::ComerciosController < ApplicationController
     @comercio.habilitado = !@comercio.habilitado
     if @comercio.habilitado
         @comercio.usuario.update(rol_id: 2)
+        #Solo para el caso que el usuario no realizo el Paso 2 en el Alta de Comercio.
+        if (@comercio.plan_nuevo && @comercio.tipo_servicio_id ==  TipoServicio::NUEVO)
+          @comercio.plan_nuevo.update(estado: :aprobado, tipo_servicio_id: TipoServicio::GRATUITO)
+          @comercio.update(tipo_servicio_id: TipoServicio::GRATUITO)
+        end
     end
     if @comercio.save
-      @comercios = Comercio.where(activo: true).order(:nombre)
-      render json: @comercios
+      render json: @comercio
     else
       render json: @comercio.errors, status: :unprocessable_entity
     end

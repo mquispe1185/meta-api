@@ -10,7 +10,7 @@ class Comercio < ApplicationRecord
   has_many :comercioplanes, dependent: :destroy
   has_many_attached :fotos, dependent: :destroy
 
-  # after_create :set_comercioplan QUITADO PARA NO CREAR COMERCIOPLAN EN EL ALTA.
+  after_create :set_comercioplan #QUITADO PARA NO CREAR COMERCIOPLAN EN EL ALTA.
 
   # ESTADOS DE PLAN ACTUAL DE COMERCIO
   enum estado: %i[default cambio_pendiente]
@@ -36,12 +36,16 @@ class Comercio < ApplicationRecord
  
   def set_comercioplan
     Comercioplan.create(comercio: self, tipo_servicio: tipo_servicio, formapago_id: Formapago::GRATUITO,
-                        estado: :aprobado, desde: Time.now, hasta: 30.days.from_now,
+                        estado: :pendiente, desde: Time.now, hasta: 30.days.from_now,
                         importe: 0, usuario: usuario, meses: 1, pagado: true)
   end
 
   def direccion_string
     "#{domicilio} - #{localidad.nombre} - #{provincia.nombre}"
+  end
+
+  def plan_nuevo
+    comercioplanes.find_by(tipo_servicio_id: TipoServicio::NUEVO, estado: :pendiente)
   end
 
   def es_gratuito
